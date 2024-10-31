@@ -2,18 +2,17 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 env = Environment(loader=FileSystemLoader('templates'))
-template = env.get_template('contacto.html')
+print(os.path.abspath('templates'))
+template = env.get_template('calendario.html')
 
-# Funciones para manejar las rutas específicas
-def contacto(environ, start_response):
-    # Lógica para la ruta 'templates/contacto.html'
-    response = template.render().encode('utf-8')
-    print("template render")
-    print(b"" + response)
+def calendario(environ, start_response, evFuturo):
+    # Lógica para la ruta 'templates/calendario'
+    response = template.render(evFuturo = evFuturo).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
     return [response]
+    
 
 def handle_404(environ, start_response):
     # Lógica para manejar una ruta no reconocida (404)

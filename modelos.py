@@ -10,35 +10,37 @@ DATABASE_URL = "postgresql://benat:12345678@localhost/elrincondelaliga?port=5432
 engine = create_engine(DATABASE_URL)
 
 # Crear una sesión para interactuar con la base de datos
-Session = sessionmaker(bind=engine)
+sesion = sessionmaker(bind=engine)
 def abrir_sesion():
-    return Session()
+    return sesion()
 
-def cerrar_sesion(session):
+def cerrar_sesion(sesion):
     # Cerrar la sesión al terminar
-    session.close()
+    sesion.close()
 
 class miCRUD:
-    def create(self, session):
-        session.add(self)
-        session.commit()
+    def create(self, sesion):
+        sesion.add(self)
+        sesion.commit()
 
     @classmethod
-    def read(cls, session, **consulta):
-        return session.query(cls).filter_by(**consulta).all() #devuelve una lista de objetos
-        #return session.query(cls).all()
+    def readAlgunos(cls, sesion, **consulta):
+        return sesion.query(cls).filter_by(**consulta).all() #devuelve una lista de objetos
+        #return sesion.query(cls).all()
+    def read(cls, sesion):
+        return sesion.query(cls).all()
 
-    def update(self,session):
-        session.commit()
+    def update(self,sesion):
+        sesion.commit()
 
-    def delete(self, session):
-        session.delete(self)
-        session.commit()
+    def delete(self, sesion):
+        sesion.delete(self)
+        sesion.commit()
 
 
 Base = declarative_base()
 
-class enVivo(Base):
+class enVivo(Base, miCRUD):
     __tablename__ = 'envivo'
     id = Column(Integer, primary_key=True)
     minActual = Column(Integer)
@@ -75,18 +77,18 @@ class escribeNot(Base):
     id = Column(Integer, primary_key=True)
     idNot = Column(Integer, ForeignKey('noticias.id'))
     noticia = relationship('Noticias', backref='escribeNot')
-    idUser = Column(Integer, ForeignKey('usuarios.id'))
+    idUsuario = Column(Integer, ForeignKey('usuarios.id'))
     usuario = relationship('Usuarios', backref='escribeNot')
+    nombreUsuario = Column(String)
     comentario = Column(String)
     likes = Column(Integer)
 
 class escribeRes(Base):
     __tablename__ = 'escriberes'
     id = Column(Integer, primary_key=True)
-    idRes = Column(Integer, ForeignKey('noticias.id'))
-    resTerminados = relationship('resterminados', backref='escribeRes')
-    idUser = Column(Integer, ForeignKey('usuarios.id'))
+    idUsuario = Column(Integer, ForeignKey('usuarios.id'))
     usuario = relationship('Usuarios', backref='escribeRes')
+    nombreUsuario = Column(String)
     comentario = Column(String)
     likes = Column(Integer)
 
@@ -98,48 +100,10 @@ class evFuturos(Base, miCRUD):
     horaInicio = Column(Date) 
     dia = Column(Date)
 # Crear la tabla en la base de datos (esto solo se hace una vez)"""
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 # Ejemplos de uso:
 
-
-"""sesion = abrir_sesion()
-hoy = date.today()
-# URL de la API de JSONPlaceholder para obtener datos de usuarios
-url = "https://raw.githubusercontent.com/openfootball/football.json/refs/heads/master/2024-25/es.1.json"
-
-# Realiza una solicitud GET a la API
-response = requests.get(url)
-
-# Verifica si la solicitud fue exitosa (código de respuesta 200)
-if response.status_code == 200:
-    # Utiliza json.loads() para analizar la respuesta JSON
-    #data = json.loads(response.text)
-    data = response.json()
-    i = 0
-    while(i < len(data["matches"])):
-        i+=1
-        if data["matches"][i]["date"] <= str(hoy):
-            resterminado = ResTerminados()
-            resterminado.eq1 = data["matches"][i]["team1"]
-            resterminado.eq2 = data["matches"][i]["team2"]
-            resterminado.resEq1 = int(data["matches"][i]["score"]["ft"][0])
-            resterminado.resEq2 = int(data["matches"][i]["score"]["ft"][1])
-            resterminado.horaInicio = data["matches"][i]["date"]
-            resterminado.dia = data["matches"][i]["date"]
-        else:
-            evFuturo = evFuturos()
-            evFuturo.eq1 = data["matches"][i]["team1"]
-            evFuturo.eq2 = data["matches"][i]["team2"]
-            evFuturo.horaInicio = data["matches"][i]["date"]
-            evFuturo.dia = data["matches"][i]["date"]
-    print(data["matches"][1])
-
-else:
-    print(f"Error en la solicitud. Código de respuesta: {response.status_code}")
-
-cerrar_sesion(sesion)
-sesion = None
 
 '''# crear 3 productos
 for i in range(1,4):
@@ -174,4 +138,3 @@ product.delete(sesion)
 
 cerrar_sesion(sesion)
 sesion = None'''
-"""

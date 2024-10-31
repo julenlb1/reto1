@@ -2,11 +2,18 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 env = Environment(loader=FileSystemLoader('templates'))
-template = env.get_template('contacto.html')
+template = env.get_template('plantilla.html')
 
 # Funciones para manejar las rutas específicas
-def contacto(environ, start_response):
-    # Lógica para la ruta 'templates/contacto.html'
+def english_handle_index(environ, start_response):
+    # Lógica para la ruta '/en'
+    status = '200 OK'
+    response_headers = [('Content-type', 'text/html')]
+    start_response(status, response_headers)
+    return [b'Hello, English World!']
+
+def plantilla(environ, start_response):
+    # Lógica para la ruta 'templates/plantilla.html'
     response = template.render().encode('utf-8')
     print("template render")
     print(b"" + response)
