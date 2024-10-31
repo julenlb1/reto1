@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>El rincon del futbol</title>
+    <link rel="shortcut icon" href="logos/logoPagina.webp" alt="logo"/>
 </head>
 <body >
-    <div class="menu">
-        <a href="index.html">Noticias</a>
-        <a href="resultados.html">Resultados</a>
-        <a href="equipos.html">Equipos</a>
-        <a href="contacto.html">Contacto</a>
-      </div>
+  <div class="menu">
+    <a href="index.html">Inicio</a>
+    <a href="noticias.html">Noticias</a>
+    <a href="partidosfinalizados.html">Partidos finalizados</a>
+    <a href="endirecto.html">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+    <a href="calendario.html">Calendario</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
     
-        <h1>Contacto</h1>
+        <center><h1>Contacto</h1></center>
         <div class="texto1">¿Tienes alguna pregunta o comentario sobre la Liga Española de Fútbol? Nos encantaría saber de ti. Ya sea que quieras compartir tus opiniones, sugerencias o solicitar información adicional, estamos aquí para ayudarte.
-          Puedes contactarnos a través del siguiente formulario o enviar un correo electrónico a. <br><br>
+          Puedes contactarnos a través del siguiente formulario o enviar un correo electrónico a nosotros. <br><br>
           
           También estamos activos en nuestras redes sociales, donde puedes seguirnos para obtener las últimas noticias y actualizaciones.
           ¡Gracias por tu interés en el apasionante mundo del fútbol español!</div>
@@ -24,19 +28,21 @@
       <div class="grid-container">
         <div class="registrarse"> <h3>Registrarse:</h3>
         
-              <form action="/sign-up" method="POST">
-                <p>Nombre del usuario: <input type="text" name="usuario" maxlength="50"></p>
+              <form>
+                <p>Nombre del usuario: <input type="text" name="usuario" maxlength="20"></p>
+
                 <p>Correo electrónico: <input type="email" id="mail" name="user_mail"> </p>
-                <p>Crear contraseña: <input type="password" name="password" minlength="8"  placeholder="Minimo 8 caracteres"></p>
-                <p>Repetir contraseña: <input type="password" name="password-2" minlength="8"  placeholder="Minimo 8 caracteres"></p>
+                <p>Crear contraseña: <input type="password" name="password" minlength="6"  placeholder="Minimo 6 carácteres"></p>
+                <p>Repetir contraseña: <input type="password" name="password-2" minlength="6"  placeholder="Minimo 6 carácteres"></p>
+                
                 <p>
-                  <input type="submit" value="Registrarse">
-                  <input type="reset" value="Borrar">
+                  <input type="submit" value="Registrarse" class="registro">
+                  <input type="reset" value="Borrar" class="borrar">
                 </p>
             </form>
         </div>
        
-        <div class="iniciarSesion"> <h3>Iniciar Sesion:</h3>
+        <div class="iniciarSesion"> <h3>Iniciar Sesión:</h3>
 
             <form>
             <p>Usuario: <input type="text" name="usuario" maxlength="6"></p>
@@ -44,8 +50,8 @@
             <p>Contraseña: <input type="password" name="password" minlength="6"></p>
             
             <p>
-                <input type="submit" value="Iniciar sesion">
-                <input type="reset" value="Borrar">
+                <input type="submit" value="Iniciar sesión" class="iniciasesion">
+                <input type="reset" value="Borrar" class="borrar">
               </p>
             </form>
           
@@ -55,24 +61,24 @@
           <form>
               <h3>Enviar mensaje:</h3>
               <p>Mensaje: <br> <textarea name="texto" rows="4" cols="40" placeholder="Escriba algo"></textarea> </p>
-              <input type="submit" value="Enviar">
-              <input type="reset" value="Borrar">
+              <input type="submit" value="Enviar" class="enviar">
+              <input type="reset" value="Borrar" class="borrar">
           </form>
       </div>
     
       </div>
-      <center><img src="laliga.png" height="150px" width="600px" ></center>
+    
 
       <div class="footer">
         
         <center><div class="grid-itemFooter"> <h4>Copyright</h4> <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p> </div></center>
 
         <center><div class="grid-itemFooter"> <h4>Redes sociales</h4>
-                                        <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.jfif"></a> 
-                                        <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
-                                        <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
-                                        <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.svg"></a>
-                                        
+          <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.webp"></a> 
+          <a href="https://x.com/laliga"><img src="logos/logoTwitter.webp"></a>
+          <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.webp"></a>
+          <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.webp"></a>
+          
         </div></center>  
       </div>
 
@@ -80,24 +86,13 @@
 </body>
 
 <style>
-    h1{
-        color:white;
-        text-align: center;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    }
-    h3{
-        color:rgb(212, 204, 204);
-    }
-
-    p{
-        color:white;
-        font-size: 14px;
-    }
 
     body {
       margin: 0;
+      color: white;
       font-family: Helvetica;
-      background-color: #161616;
+      background-color: black;
+
     }
     
     .menu {
@@ -181,61 +176,57 @@
     .enviarMensaje input{
       margin-top: 10px;
     }
-/*Barra Edad*/    
-    :root {
-  --progressW: 50%;
-    }
 
-    label {
-    display: block;
-    width: 70%;
-    vertical-align: baseline;
-    }
+    .enviar{
+            height:30px;
+            width:70px;
+            background-color: rgb(51, 255, 0);
+            animation-name: example1;
+            animation-duration: 6s;
+            border-radius: 8px;
+        }
 
-    .sliderBar {
-    position: relative;
-    margin: 0 12px;
-    }
+        @keyframes example1 {
+  0%   {background-color: rgb(255, 217, 0);}
+  25%  {background-color: yellow;}
+  50%  {background-color: rgb(72, 255, 0);}
+  100% {background-color: rgb(5, 63, 5);color:white;}
+}
+   
+  .borrar{
+            height:30px;
+            width:70px;
+            border-radius: 8px;
+            background-color: rgb(255, 0, 0);
+            animation-name: example2;
+            animation-duration: 6s;
+        }
 
-    [type=range] {
-    -webkit-appearance: none;
-    width: calc(100% - 50px);
-    vertical-align: middle;
-    border: none;
-    outline: none;
-    }
+        @keyframes example2 {
+  0%   {background-color: rgb(255, 0, 0);}
+  25%  {background-color: rgb(223, 78, 78);}
+  50%  {background-color: rgb(165, 48, 48);color:white;}
+  100% {background-color: rgba(128, 0, 28, 0.541);color:white;}
+}
 
-    [type=range]::-webkit-slider-runnable-track {
-    -webkit-appearance: slider-horizontal;
-    height: 2px;
-    padding: 0;
-    cursor: pointer;
-    }
+.iniciasesion, .registro{
+            height:30px;
+            width:100px;
+            border-radius: 8px;
+            background-color: rgb(0, 255, 200);
+            animation-name: example3;
+            animation-duration: 6s;
+  }
 
-
-    [type=range]::-webkit-slider-thumb {
-    box-sizing: border-box;
-    /*FF*/
-    -webkit-appearance: none;
-    width: 24px;
-    height: 24px;
-    margin-top: -12px;
-    border: 6px solid #eee;
-    border-radius: 50%;
-    background: #999;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-    }
-    
-/*Barra Edad*/  
+  @keyframes example3 {
+  0%   {background-color: rgb(0, 204, 255);}
+  25%  {background-color: rgb(78, 177, 223);}
+  50%  {background-color: rgb(48, 89, 165);color:white;}
+  100% {background-color: rgba(16, 27, 126, 0.541); color:white;}
+}  
 
     </style>
 
-    <script>
-        function changeVar(value, min, max){
-    var range = max - min;
-    var progressW = (value-min)/range*100 +'%';
-    $('#rangeField').css('--progressW', progressW);
-    }
-    </script>
+   
     
 </html>
