@@ -5,9 +5,9 @@ env = Environment(loader=FileSystemLoader('templates'))
 print(os.path.abspath('templates'))
 template = env.get_template('calendario.html')
 
-def calendario(environ, start_response, evFuturo):
+def paginaEvFuturos(environ, start_response, evFuturos):
     # Lógica para la ruta 'templates/calendario'
-    response = template.render(evFuturo = evFuturo).encode('utf-8')
+    response = template.render(evFuturos = evFuturos).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -29,7 +29,7 @@ def serve_static(environ, start_response):
     path = environ['PATH_INFO']
     print('path is:', path) 
     # path is: /static/style.css    
-    css_path = static_dir + '\\style.css'    
+    css_path = static_dir + '\\calendario.css'    
     print('css_path:', css_path)
     #css_path: c:\*\*\DWES\Ej_mvc\static\style.css
     

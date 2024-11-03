@@ -2,16 +2,13 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 env = Environment(loader=FileSystemLoader('templates'))
-print(os.path.abspath('templates'))
-template = env.get_template('resultados.html')
+template = env.get_template('partidosfinalizados.html')
 
 # Funciones para manejar las rutas específicas
 
 def paginaResultados(environ, start_response, resTerminados):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
     response = template.render(resTerminados = resTerminados).encode('utf-8')
-    print("template render")
-    print(b"" + response)
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -33,7 +30,7 @@ def serve_static(environ, start_response):
     path = environ['PATH_INFO']
     print('path is:', path) 
     # path is: /static/style.css    
-    css_path = static_dir + '\\style.css'    
+    css_path = static_dir + 'partidosfinalizados.css'    
     print('css_path:', css_path)
     #css_path: c:\*\*\DWES\Ej_mvc\static\style.css
     

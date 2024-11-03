@@ -2,10 +2,18 @@ from sqlalchemy import create_engine, Column, Float, Integer, String, Date, Time
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.orm import declarative_base 
-from datetime import date
-import requests
+from datetime import datetime
+import psycopg2
 # Configurar la conexión a la base de datos PostgreSQL
 # engine = create_engine('postgresql://usuario:contraseña@localhost/nombre_de_la_bd')
+
+try:
+    import psycopg2
+    print("Psycopg2 is installed")
+except ImportError:
+    print(ImportError)
+    print("Psycopg2 is not installed")
+
 DATABASE_URL = "postgresql://benat:12345678@localhost/elrincondelaliga?port=5432"
 engine = create_engine(DATABASE_URL)
 
@@ -13,7 +21,7 @@ engine = create_engine(DATABASE_URL)
 sesion = sessionmaker(bind=engine)
 def abrir_sesion():
     return sesion()
-
+3
 def cerrar_sesion(sesion):
     # Cerrar la sesión al terminar
     sesion.close()
@@ -27,6 +35,8 @@ class miCRUD:
     def readAlgunos(cls, sesion, **consulta):
         return sesion.query(cls).filter_by(**consulta).all() #devuelve una lista de objetos
         #return sesion.query(cls).all()
+    def readJornadas(cls, sesion, **consulta):
+        return sesion.query(cls).group_by(**consulta).all()
     def read(cls, sesion):
         return sesion.query(cls).all()
 
@@ -43,11 +53,12 @@ Base = declarative_base()
 class enVivo(Base, miCRUD):
     __tablename__ = 'envivo'
     id = Column(Integer, primary_key=True)
-    minActual = Column(Integer)
+    minactual = Column(Integer)
     eq1 = Column(String)
     eq2 = Column(String)
-    golesEq1 = Column(Integer)
-    golesEq2 = Column(Integer)
+    goleseq1 = Column(Integer)
+    goleseq2 = Column(Integer)
+    matchday = Column(String)
 
 class Usuarios(Base):
     __tablename__ = 'usuarios'
@@ -59,8 +70,8 @@ class Usuarios(Base):
 class Noticias(Base):
     __tablename__ = 'noticias'
     id = Column(Integer, primary_key=True)
-    nombreNot = Column(String)
-    cuerpoNot = Column(String)
+    nombrenot = Column(String)
+    cuerponot = Column(String)
     Likes = Column(Integer)
 
 class ResTerminados(Base, miCRUD):
@@ -68,39 +79,41 @@ class ResTerminados(Base, miCRUD):
     id = Column(Integer, primary_key=True)
     eq1 = Column(String)
     eq2 = Column(String)
-    resEq1 = Column(Integer)
-    resEq2 = Column(Integer)
-    horaInicio = Column(Date) 
+    reseq1 = Column(Integer)
+    reseq2 = Column(Integer)
+    horainicio = Column(Time) 
     dia = Column(Date)
+    matchday = Column(String)
 class escribeNot(Base):
     __tablename__ = 'escribenot'
     id = Column(Integer, primary_key=True)
-    idNot = Column(Integer, ForeignKey('noticias.id'))
+    idnot = Column(Integer, ForeignKey('noticias.id'))
     noticia = relationship('Noticias', backref='escribeNot')
-    idUsuario = Column(Integer, ForeignKey('usuarios.id'))
+    idusuario = Column(Integer, ForeignKey('usuarios.id'))
     usuario = relationship('Usuarios', backref='escribeNot')
-    nombreUsuario = Column(String)
+    nombreusuario = Column(String)
     comentario = Column(String)
     likes = Column(Integer)
 
 class escribeRes(Base):
     __tablename__ = 'escriberes'
     id = Column(Integer, primary_key=True)
-    idUsuario = Column(Integer, ForeignKey('usuarios.id'))
+    idusuario = Column(Integer, ForeignKey('usuarios.id'))
     usuario = relationship('Usuarios', backref='escribeRes')
-    nombreUsuario = Column(String)
+    nombreusuario = Column(String)
     comentario = Column(String)
     likes = Column(Integer)
 
 class evFuturos(Base, miCRUD):
-    __tablename__ = 'evFuturos'
+    __tablename__ = 'evfuturos'
     id = Column(Integer, primary_key=True)
     eq1 = Column(String)
     eq2 = Column(String)
-    horaInicio = Column(Date) 
+    horainicio = Column(Time) 
     dia = Column(Date)
+    matchday = Column(String)
 # Crear la tabla en la base de datos (esto solo se hace una vez)"""
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 # Ejemplos de uso:
 

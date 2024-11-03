@@ -1,14 +1,15 @@
-# primero instalar requests desde la consola
-# conda install requests ; pip install requests
+## Este codigo se ejecutará cada cierto tiempo para actualizar las tablas de partidos futuros cuando dichos partidos ya se hayan disputado y moverá esos datos de la tabla de 
+# evFuturos a la de ResTerminados, además de poner un evento en vivo si un partido se está disputando 
+
 from sqlalchemy import create_engine, Column, Float, Integer, String, Date, Time
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.orm import declarative_base 
 import requests
-import json
 import psycopg2
+from datetime import datetime
 from datetime import date
-
+from datetime import timedelta
 import modelos
 
 DATABASE_URL = "postgresql://benat:12345678@localhost/elrincondelaliga?port=5432"
@@ -22,39 +23,77 @@ def abrir_sesion():
 def cerrar_sesion(sesion):
     # Cerrar la sesión al terminar
     sesion.close()
-sesion = abrir_sesion()
 
 hoy = date.today()
-#ahora = x.strftime("%H")+":"+x.strftime("%M")
-# URL de la API de JSONPlaceholder para obtener datos de usuarios
+ahora = datetime.now()
+
+
+terminar = ahora + timedelta(minutes=90) 
+
+# URL de la API de fútbol para obtener datos de partidos
 url = "https://raw.githubusercontent.com/openfootball/football.json/refs/heads/master/2024-25/es.1.json"
 
-# Realiza una solicitud GET a la API
+# Realiza una solicitud GET a la API y abre la sesión de queries sql
 response = requests.get(url)
+sesion = abrir_sesion()
 
-# Verifica si la solicitud fue exitosa (código de respuesta 200)
+# Eliminar todos los registros (eliminando las tablas y volviendo a crearlas)
+
+modelos.Base.metadata.drop_all(engine) # Truncar la tablas al borrar los datos
+modelos.Base.metadata.create_all(engine) # Volver a crear las tablas 
+
+
+
+
+# Aparte de hacer un fetch asíncrono a la api, utiliza esos datos para insertarlos en la BBDD
 if response.status_code == 200:
-    # Utiliza json.loads() para analizar la respuesta JSON
-    #data = json.loads(response.text)
     data = response.json()
     i = 0
-    while(i < len(data["matches"])):
-        i+=1
-        if data["matches"][i]["date"] <= str(hoy):
-            resterminado = modelos.ResTerminados()
-            resterminado.eq1 = data["matches"][i]["team1"]
-            resterminado.eq2 = data["matches"][i]["team2"]
-            resterminado.resEq1 = int(data["matches"][i]["score"]["ft"][0])
-            resterminado.resEq2 = int(data["matches"][i]["score"]["ft"][1])
-            resterminado.horaInicio = data["matches"][i]["date"]
-            resterminado.dia = data["matches"][i]["date"]
-
+    for match in data["matches"]:
+        match_date = match["date"] # La fecha del partido de json
+        if i < 140:
+            match_time = match["time"] # La hora del partido de json
+            match_datetime_str = f"{match_date} {match_time}" # Uniendo las dos para hacer un datetime
+            match_datetime = datetime.strptime(match_datetime_str, "%Y-%m-%d %H:%M") # Formateo a datetime
         else:
+            match_datetime = datetime.strptime("2000-01-01 00:00","%Y-%m-%d %H:%M")
+            print(match_datetime != False)
+            continue
+        if match_datetime.date() < hoy: # Si el dia del json es menor al actual, insertará los datos en la tabla de ResTerminados
+            # Partidos terminados
+            resterminado = modelos.ResTerminados()
+            if "ft" in match.get("score", {}):
+                resterminado.reseq1 = match["score"]["ft"][0]
+                resterminado.reseq2 = match["score"]["ft"][1]
+            resterminado.eq1 = match["team1"]
+            resterminado.eq2 = match["team2"]
+            resterminado.horainicio = match_datetime.time()
+            resterminado.dia = match_date
+            resterminado.matchday = match["round"]
+            sesion.add(resterminado)
+        elif match_datetime.date() == hoy: # Si el dia es el mismo, los insertará en enVivo
+            # Partidos en vivo
+            envivo = modelos.enVivo()
+            envivo.eq1 = match["team1"]
+            envivo.eq2 = match["team2"]
+            envivo.goleseq1 = 0
+            envivo.goleseq2 = 0
+            envivo.minactual = 0
+            envivo.matchday = match["round"]
+            sesion.add(envivo)
+
+        else: # Si no, los insertará en evFuturos
+            # Partidos futuros
             evFuturo = modelos.evFuturos()
-            evFuturo.eq1 = data["matches"][i]["team1"]
-            evFuturo.eq2 = data["matches"][i]["team2"]
-            evFuturo.horaInicio = data["matches"][i]["date"]
-            evFuturo.dia = data["matches"][i]["date"]
+            evFuturo.eq1 = match["team1"]
+            evFuturo.eq2 = match["team2"]
+            evFuturo.matchday = match["round"]
+            evFuturo.dia = match_date
+            evFuturo.horainicio = match_datetime.time()
+            print(f"{match_datetime} == el dia muerto")
+            sesion.add(evFuturo)
+        i += 1
+    sesion.commit()
 
 else:
     print(f"Error en la solicitud. Código de respuesta: {response.status_code}")

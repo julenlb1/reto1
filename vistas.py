@@ -8,8 +8,6 @@ template = env.get_template('contacto.html')
 def contacto(environ, start_response):
     # Lógica para la ruta 'templates/contacto.html'
     response = template.render().encode('utf-8')
-    print("template render")
-    print(b"" + response)
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)

@@ -1,0 +1,87 @@
+
+body {
+  margin: 0;
+  background-color: black;
+  font-family: Helvetica;
+  color:white;
+}
+
+.menu {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.menu a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.menu a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.resultados {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 30px;
+}
+
+.partido {
+  text-align: center;
+}
+
+.VS {
+  text-align: center;
+  margin-right: 70px;
+}
+
+.goles1 {
+margin-top: 15px;
+  font-size: 40px;
+  margin-left: 100px;
+}
+
+.goles2 {
+  margin-top: 15px;
+  font-size: 40px;
+  margin-left: 50px;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.grid-itemFooter img {
+  height: 30px;
+  width: 30px;
+  border-radius: 26%;
+  justify-content: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.grid-itemFooter h4 {
+  text-align: center;
+}
+
+
+.circle {
+content: " ";
+display: inline-block;
+border-radius: 50%;
+background-color: red;
+color: red;
+border: 1px red solid;
+width:10px; /*misma altura y anchura*/
+height: 10px;
+margin-left: 10px;
+
+}
