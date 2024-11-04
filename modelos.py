@@ -59,6 +59,7 @@ class enVivo(Base, miCRUD):
     goleseq1 = Column(Integer)
     goleseq2 = Column(Integer)
     matchday = Column(String)
+    mipartido = Column(String)
 
 class Usuarios(Base):
     __tablename__ = 'usuarios'
@@ -84,6 +85,7 @@ class ResTerminados(Base, miCRUD):
     horainicio = Column(Time) 
     dia = Column(Date)
     matchday = Column(String)
+    mipartido = Column(String)
 class escribeNot(Base):
     __tablename__ = 'escribenot'
     id = Column(Integer, primary_key=True)
@@ -112,8 +114,9 @@ class evFuturos(Base, miCRUD):
     horainicio = Column(Time) 
     dia = Column(Date)
     matchday = Column(String)
+    mipartido = Column(String)
 # Crear la tabla en la base de datos (esto solo se hace una vez)"""
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 # Ejemplos de uso:
 

@@ -1,8 +1,6 @@
 from wsgiref.simple_server import make_server
 from urllib.parse import parse_qs
 import vistas
-import environ
-#import vistasEnVivo
 #import vistasEquipos
 #import vistasNoticias
 #import vistasPlantilla
@@ -10,54 +8,12 @@ import modelos
 from modelos import ResTerminados
 from modelos import enVivo
 from modelos import evFuturos
-# Definir función para leer productos.
-"""def leerProductos():
-    sesion = modelos.abrir_sesion()
-    consulta = {"id": 1}
-    productos = modelos.Producto.read(sesion, **consulta)
-    # print(productos)
-    modelos.cerrar_sesion(sesion)
-    sesion = None
-    return productos"""
 
-# Definir función para añadir productos.
-"""def add_product(environ, start_response):
-    if environ['REQUEST_METHOD'] == 'POST':
-        try:
-            # Leer y parsear los datos del formulario
-            # size 0 si la cabecera CONTENT_LENGTH no está definida
-            size = int(environ.get('CONTENT_LENGTH', 0))
-            # convertir en cadena de texto
-            data = environ['wsgi.input'].read(size).decode()
-            params = parse_qs(data) # diccionario con clave y valor (lista, aunque sólo haya un valor)            
-            # Crear y guardar el nuevo producto
-            producto = modelos.Producto(
-                producto=params['producto'][0],
-                modelo=params['modelo'][0],
-                precio=float(params['precio'][0])
-            )
-            sesion = modelos.abrir_sesion()
-            producto.create(sesion)
-            modelos.cerrar_sesion(sesion)
-            sesion = None
-            # Redirigir a la página principal
-            # '303 See Other' indica que se debe realizar una solicitud GET a la 
-            # URL especificada en Location, en este caso -> '/es'
-            start_response('303 See Other', [('Location', '/es')])
-            # hay que devolver cadena de bytes
-            return [b''] # cuerpo de la respuesta vacío porque no necesitamos enviar contenido adicional
-            # finaliza la respuesta, permitiendo que el navegador procese la redirección hacia '/es'
-        except Exception as e:
-            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
-            return [str(e).encode('utf-8')]
-    else:
-        return vistas.handle_404(environ, start_response)"""
-
-def leerResTerminados(environ, start_response):
-    
-    sesion = modelos.abrir_sesion()
-    juegos = sesion.query(ResTerminados).order_by(ResTerminados.matchday.asc(), ResTerminados.dia.asc()).all()
-    datosJerarquizados = {}
+def leerResTerminados(environ, start_response): # Función para hacer una query de la base de datos a la tabla de resultados terminados
+                                                # y plasmar esos datos en el html mediante jinja
+    sesion = modelos.abrir_sesion() # Abro la sesión de queries
+    juegos = sesion.query(ResTerminados).order_by(ResTerminados.matchday.asc(), ResTerminados.dia.asc()).all() # Esta consulta obtendrá los datos con un orden jerárquico ordenado por matchday > dia > partido 
+    datosJerarquizados = {} # Este diccionario guardara los datos en ese orden jerárquico                                                                          
     for juego in juegos:
         if juego.matchday not in datosJerarquizados:
             datosJerarquizados[juego.matchday] = {}
@@ -66,17 +22,22 @@ def leerResTerminados(environ, start_response):
         datosJerarquizados[juego.matchday][juego.dia].append(juego)
     modelos.cerrar_sesion(sesion)
     sesion = None
-    return datosJerarquizados
-def leerEnVivo(environ, start_response):
-    sesion = modelos.abrir_sesion()
-    consulta = {envivo.c.matchday, envivo.c.dia}
-    modelos.envivo.readJornadas(sesion, consulta)
+    return datosJerarquizados # Devolver el diccionario
+
+def leerEnVivo(environ, start_response): # Función para hacer una query de la base de datos a la tabla de partidos en vivo
+    sesion = modelos.abrir_sesion()      # y plasmar esos datos en el html mediante jinja
+    directos = sesion.query(enVivo).order_by(enVivo.matchday.asc()).all()
+    datosJerarquizadosDirecto = {}
+    for directo in directos:
+        if directo.matchday not in datosJerarquizadosDirecto:
+            datosJerarquizadosDirecto[directo.matchday] = []
+        datosJerarquizadosDirecto[directo.matchday].append(directo)
     modelos.cerrar_sesion(sesion)
     sesion = None
-    return envivo
+    return datosJerarquizadosDirecto
 
-def leerCalendario(environ, start_response):
-    sesion = modelos.abrir_sesion()
+def leerCalendario(environ, start_response):# Función para hacer una query de la base de datos a la tabla de partidos por disputar
+    sesion = modelos.abrir_sesion()         # y plasmar esos datos en el html mediante jinja   
     juegos = sesion.query(evFuturos).order_by(evFuturos.matchday.asc(), evFuturos.dia.asc()).all()
     datosJerarquizadosCalendario = {}
     for juego in juegos:
@@ -135,7 +96,7 @@ def ponerComentarioRes(environ, start_response):
             data = environ['wsgi.input'].read(size).decode()
             paramsComentario = parse_qs(data)      
             
-            if params['nombre'][0] == "" or params['email'][0] == "" or params['password'][0] == "" or params['password-2'][0] == "":
+            if params['nombre'] == "" or params['email'] == "" or params['password'] == "" or params['password-2'] == "":
                 return["hola"]
             else:
                 sesion = modelos.abrir_sesion()
@@ -146,7 +107,7 @@ def ponerComentarioRes(environ, start_response):
                 escribeRes = modelos.escribeRes(
                 idUsuario=idUsuario,
                 usuario=nombreUsuario,
-                comentario=paramsComentario['comentario'][0],
+                comentario=paramsComentario['comentario'],
                 likes=0
                 )
             
@@ -165,11 +126,12 @@ def ponerComentarioRes(environ, start_response):
 def crearUsuario(environ, start_response):
     if environ['REQUEST_METHOD'] == 'POST':
         try:
+            print("aaaaaa")
             size = int(environ.get('CONTENT_LENGTH', 0))
             data = environ['wsgi.input'].read(size).decode()
             paramsUsuario = parse_qs(data)      
             if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "" or paramsUsuario['password-2'] == "":
-                return[b"<script>alert('Todos los campos deben de estar completos')</script>"]
+                return[b"alert('Todos los campos deben de estar completos')"]
             else:
                 usuario = modelos.Usuarios(
                 nombre=paramsUsuario['nombre'],
@@ -199,8 +161,8 @@ def iniciarSesion(environ, start_response):
             else:
                 
                 sesion = modelos.abrir_sesion()
-                consulta = {"nombre" = paramsUsuario['nombre'], "email" = paramsUsuario['email'], "passwd" = paramsUsuario['password']}
-                inicioSesion = modelos.Usuarios.readAlgunos(sesion, **consulta)                   
+                #consulta = {"nombre" = paramsUsuario['nombre'], "email" = paramsUsuario['email'], "passwd" = paramsUsuario['password']}
+                #inicioSesion = modelos.Usuarios.readAlgunos(sesion, **consulta)                   
                 modelos.cerrar_sesion(sesion)
                 sesion = None
                 
@@ -213,28 +175,67 @@ def iniciarSesion(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
+def insertarPartido(environ, start_response):
+    if environ['REQUEST_METHOD'] == 'POST':
+        print("funcion insertarPartido()")
+        try:
+            size = int(environ.get('CONTENT_LENGTH', 0))
+            data = environ['wsgi.input'].read(size).decode()
+            paramsPartido = parse_qs(data)      
+            
+            if paramsPartido['eq1'] == "" or paramsPartido['eq2'] == "" or paramsPartido['dia'] == "" or paramsPartido['password-2'][0] == "":
+                return[b"<script>alert('Tienes que rellenar todos los campos')</script>"]
+            else:
+                sesion = modelos.abrir_sesion()
+                modelos.cerrar_sesion(sesion)
+                sesion = None
+                crearPartido = modelos.evFuturos(
+                idNot=idNoticia,
+                idUsuario=idUsuario,
+                usuario=nombreUsuario,
+                comentario=paramsComentario['comentario'][0],
+                likes=0
+                )
+            
+                sesion = modelos.abrir_sesion()
+                escribeNot.create(sesion)
+                modelos.cerrar_sesion(sesion)
+                sesion = None
+                start_response('303 See Other', [('Location', '/es')])
+                return [b'']
+        except Exception as e:
+            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
+            return [str(e).encode('utf-8')]
+    else:
+        return vistas.handle_404(environ, start_response)
+
 def app(environ, start_response):
     path = environ.get('PATH_INFO')
     if path == '/':
         return vistas.index(environ, start_response)
     elif path == '/contacto':
-        return vistas.contacto(environ, start_response)
+        import vistasContacto
+        return vistasContacto.contacto(environ, start_response)
     elif path.startswith('/static/'):
         return vistas.serve_static(environ, start_response)
     elif path == '/sign-up':
         return crearUsuario(environ, start_response)
     elif path == '/log-in':
         return iniciarSesion(environ, start_response)
+    elif path == '/insert-game':
+        return insertarPartido(environ, start_response)
     elif path == '/index':
-        envivo = leerEnVivo()
-        return vistasEnVivo.index(environ, start_response, envivo)
+        return vistas.index(environ, start_response)
     elif path == '/calendario':
         import vistasCalendario
         evFuturos = leerCalendario(environ, start_response)
         return vistasCalendario.paginaEvFuturos(environ, start_response, evFuturos)
     elif path == '/equipos':
         return vistasEquipos.equipos(environ, start_response)
-    
+    elif path == '/envivo':
+        import vistasEnVivo
+        enVivo = leerEnVivo(environ, start_response)
+        return vistasEnVivo.paginaEnVivo(environ, start_response, enVivo)
     elif path == '/partidosfinalizados':
         import vistasTerminado
         resTerminados = leerResTerminados(environ, start_response)

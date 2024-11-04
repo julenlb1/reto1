@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 env = Environment(loader=FileSystemLoader('templates'))
-template = env.get_template('contacto.html')
+template = env.get_template('index.html')
 
 # Funciones para manejar las rutas específicas
 def contacto(environ, start_response):
