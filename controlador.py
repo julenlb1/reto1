@@ -1,9 +1,6 @@
 from wsgiref.simple_server import make_server
 from urllib.parse import parse_qs
 import vistas
-#import vistasEquipos
-#import vistasNoticias
-#import vistasPlantilla
 import modelos
 from modelos import ResTerminados
 from modelos import enVivo
@@ -183,22 +180,20 @@ def insertarPartido(environ, start_response):
             data = environ['wsgi.input'].read(size).decode()
             paramsPartido = parse_qs(data)      
             
-            if paramsPartido['eq1'] == "" or paramsPartido['eq2'] == "" or paramsPartido['dia'] == "" or paramsPartido['password-2'][0] == "":
+            if paramsPartido['eq1'] == "" or paramsPartido['eq2'] == "" or paramsPartido['dia'] == "" or paramsPartido['hora'][0] == "":
                 return[b"<script>alert('Tienes que rellenar todos los campos')</script>"]
             else:
                 sesion = modelos.abrir_sesion()
-                modelos.cerrar_sesion(sesion)
-                sesion = None
+                
                 crearPartido = modelos.evFuturos(
-                idNot=idNoticia,
-                idUsuario=idUsuario,
-                usuario=nombreUsuario,
-                comentario=paramsComentario['comentario'][0],
-                likes=0
+                eq1=paramsPartido['eq1'],
+                eq2=paramsPartido['eq2'],
+                hora=paramsPartido['hora'],
+                dia=paramsPartido['dia'],
+                matchday=paramsPartido['matchday'],
+                mipartido="true"
                 )
-            
-                sesion = modelos.abrir_sesion()
-                escribeNot.create(sesion)
+                crearPartido.create(sesion)
                 modelos.cerrar_sesion(sesion)
                 sesion = None
                 start_response('303 See Other', [('Location', '/es')])
@@ -214,8 +209,7 @@ def app(environ, start_response):
     if path == '/':
         return vistas.index(environ, start_response)
     elif path == '/contacto':
-        import vistasContacto
-        return vistasContacto.contacto(environ, start_response)
+        return vistas.contacto(environ, start_response)
     elif path.startswith('/static/'):
         return vistas.serve_static(environ, start_response)
     elif path == '/sign-up':
@@ -227,19 +221,16 @@ def app(environ, start_response):
     elif path == '/index':
         return vistas.index(environ, start_response)
     elif path == '/calendario':
-        import vistasCalendario
         evFuturos = leerCalendario(environ, start_response)
-        return vistasCalendario.paginaEvFuturos(environ, start_response, evFuturos)
+        return vistas.paginaEvFuturos(environ, start_response, evFuturos)
     elif path == '/equipos':
         return vistasEquipos.equipos(environ, start_response)
     elif path == '/envivo':
-        import vistasEnVivo
         enVivo = leerEnVivo(environ, start_response)
-        return vistasEnVivo.paginaEnVivo(environ, start_response, enVivo)
+        return vistas.paginaEnVivo(environ, start_response, enVivo)
     elif path == '/partidosfinalizados':
-        import vistasTerminado
         resTerminados = leerResTerminados(environ, start_response)
-        return vistasTerminado.paginaResultados(environ, start_response, resTerminados)
+        return vistas.paginaResultados(environ, start_response, resTerminados)
     else:
         return vistas.handle_404(environ, start_response)
 
