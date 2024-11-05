@@ -10,137 +10,43 @@
 
 <body>
   <div class="menu">
-    <a href="index.html">Inicio</a>
-    <a href="noticias.html">Noticias</a>
-    <a href="partidosfinalizados.html">Partidos finalizados</a>
-    <a href="endirecto.html">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-    <a href="calendario.html">Calendario</a>
-    <a href="equipos.html">Equipos</a>
-    <a href="contacto.html">Contacto</a>
+    <a href="/">Inicio</a>
+    <a href="/noticias">Noticias</a>
+    <a href="/partidosfinalizados">Partidos finalizados</a>
+    <a href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+    <a href="/calendario">Calendario</a>
+    <a href="/equipos">Equipos</a>
+    <a href="/contacto">Contacto</a>
   </div>
   <center>
     <h1>Partidos en directo</h1>
   </center>
   <br><br>
-
+  {% for jornada, partidos in envivo.items() %}
   <center>
-    <h4>08/11/2024</h4>
+      <h3>{{jornada}}</h3>
   </center>
-  <div class="resultados">
-    <!-- partido -->
-    <div class="partido">
-      <img src="equipos/realSociedad.webp" height="60px" width="50px"><br>
-      <strong>Real Sociedad</strong>
-    </div>
-    <div class="goles1">-</div>
-    <div class="VS">
-      <h3>VS</h3>
-    </div>
-    <div class="goles2">-</div>
-    <div class="partido">
-      <img src="equipos/valladolid.webp" height="60px" width="50px"><br>
-      <strong>Real Madrid</strong>
-    </div>
-
-  </div>
-
-  <br><br>
-
-  <div class="resultados">
-    <!-- partido -->
-    <div class="partido">
-      <img src="equipos/madrid.webp" height="60px" width="50px"><br>
-      <strong>Real Sociedad</strong>
-    </div>
-    <div class="goles1">-</div>
-    <div class="VS">
-      <h3>VS</h3>
-    </div>
-    <div class="goles2">-</div>
-    <div class="partido">
-      <img src="equipos/mallorca.webp" height="60px" width="50px"><br>
-      <strong>Real Madrid</strong>
-    </div>
-  </div>
-
-  <center>
-    <h4>10/11/2024</h4>
-  </center>
-  <div class="resultados">
-    <!-- partido -->
-    <div class="partido">
-      <img src="equipos/espanyol.webp" height="60px" width="50px"><br>
-      <strong>Real Sociedad</strong>
-    </div>
-    <div class="goles1">-</div>
-    <div class="VS">
-      <h3>VS</h3>
-    </div>
-    <div class="goles2">-</div>
-    <div class="partido">
-      <img src="equipos/girona.webp" height="60px" width="50px"><br>
-      <strong>Real Madrid</strong>
-    </div>
-
-  </div>
-
-  <center>
-    <h4>15/11/2024</h4>
-  </center>
-  <div class="resultados">
-    <!-- partido -->
-    <div class="partido">
-      <img src="equipos/realSociedad.webp" height="60px" width="50px"><br>
-      <strong>Real Sociedad</strong>
-    </div>
-    <div class="goles1">-</div>
-    <div class="VS">
-      <h3>VS</h3>
-    </div>
-    <div class="goles2">-</div>
-    <div class="partido">
-      <img src="equipos/valladolid.webp" height="60px" width="50px"><br>
-      <strong>Real Madrid</strong>
-    </div>
-  </div>
-
-  <center>
-    <h4>16/11/2024</h4>
-  </center>
-  <div class="resultados">
-    <!-- partido -->
-    <div class="partido">
-      <img src="equipos/realSociedad.webp" height="60px" width="50px"><br>
-      <strong>Real Sociedad</strong>
-    </div>
-    <div class="goles1">-</div>
-    <div class="VS">
-      <h3>VS</h3>
-    </div>
-    <div class="goles2">-</div>
-    <div class="partido">
-      <img src="equipos/valladolid.webp" height="60px" width="50px"><br>
-      <strong>Real Madrid</strong>
-    </div>
-  </div>
-
-  <div class="footer">
-    <center>
-      <div class="grid-itemFooter">
-        <h4>Copyright</h4>
-        <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
+      {% for partido in partidos %}
+      <div class="resultados">
+      <!-- partido -->
+          <div class="partido">
+              <img src="{{partido.eq2}}.webp" height="60px" width="50px"><br>
+              <strong>{{partido.eq1}}</strong>
+          </div>
+          <div class="goles1">{{partido.goleseq1}}</div>
+          <div class="VS">
+              <h3>VS</h3>
+          </div>
+          <div class="goles2">{{partido.goleseq2}}</div>
+          <div class="partido">
+              <img src="{{partido.eq2}}.webp" height="60px" width="50px"><br>
+              <strong>{{partido.eq2}}</strong>
+          </div>
       </div>
-    </center>
-    <center>
-      <div class="grid-itemFooter">
-        <h4>Redes sociales</h4>
-        <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.webp"></a>
-        <a href="https://x.com/laliga"><img src="logos/logoTwitter.webp"></a>
-        <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.webp"></a>
-        <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.webp"></a>
-      </div>
-    </center>
-  </div>
+      {% endfor %}
+</div>
+<br><br>
+{% endfor %}
 </body>
 
 <style>

@@ -219,18 +219,20 @@ def app(environ, start_response):
     elif path == '/insert-game':
         return insertarPartido(environ, start_response)
     elif path == '/index':
-        return vistas.index(environ, start_response)
+        return vistas.indice(environ, start_response)
     elif path == '/calendario':
         evFuturos = leerCalendario(environ, start_response)
         return vistas.paginaEvFuturos(environ, start_response, evFuturos)
     elif path == '/equipos':
-        return vistasEquipos.equipos(environ, start_response)
+        return vistas.equipos(environ, start_response)
     elif path == '/envivo':
         enVivo = leerEnVivo(environ, start_response)
         return vistas.paginaEnVivo(environ, start_response, enVivo)
     elif path == '/partidosfinalizados':
         resTerminados = leerResTerminados(environ, start_response)
         return vistas.paginaResultados(environ, start_response, resTerminados)
+    elif path == '/noticias':
+        return vistas.noticias(environ, start_response)
     else:
         return vistas.handle_404(environ, start_response)
 
