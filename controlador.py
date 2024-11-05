@@ -147,30 +147,27 @@ def crearUsuario(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def iniciarSesion(environ, start_response):
+def iniciar_sesion(environ, start_response):
     if environ['REQUEST_METHOD'] == 'POST':
-        try:
-            size = int(environ.get('CONTENT_LENGTH', 0))
-            data = environ['wsgi.input'].read(size).decode()
-            paramsUsuario = parse_qs(data)      
-            if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "":
-                return[b"<script>alert('Todos los campos deben de estar completos')</script>"]
-            else:
-                
-                sesion = modelos.abrir_sesion()
-                #consulta = {"nombre" = paramsUsuario['nombre'], "email" = paramsUsuario['email'], "passwd" = paramsUsuario['password']}
-                #inicioSesion = modelos.Usuarios.readAlgunos(sesion, **consulta)                   
-                modelos.cerrar_sesion(sesion)
-                sesion = None
-                
+        size = int(environ.get('CONTENT_LENGTH', 0))
+        data = environ['wsgi.input'].read(size).decode()
+        params = parse_qs(data)
+        usuario = params.get('usuario', [None])[0]
+        contrasena = params.get('contrasena', [None])[0]
+        print('contrasena: ' +  contrasena)
+        sesion = modelos.abrir_sesion()
+        consulta = {"user": usuario, "password": contrasena}
+        usuarios = modelos.Usuarios.readAlgunos(sesion, **consulta)
+        if usuarios:
+            hayUser = True
+            return usuario, sesion, hayUser
+        else:
+            sesion.close()
+            sesion = None
+            return None, None, None
 
-                start_response('303 See Other', [('Location', '/contacto')])
-                return [b"<script>alert('Sesion iniciada correctamente')</script>" + start_response]
-        except Exception as e:
-            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
-            return [str(e).encode('utf-8')]
-    else:
-        return vistas.handle_404(environ, start_response)
+def finalizar_sesion(session):
+    modelos.cerrar_sesion(session)
 
 def insertarPartido(environ, start_response):
     if environ['REQUEST_METHOD'] == 'POST':
@@ -181,23 +178,23 @@ def insertarPartido(environ, start_response):
             paramsPartido = parse_qs(data)      
             
             if paramsPartido['eq1'] == "" or paramsPartido['eq2'] == "" or paramsPartido['dia'] == "" or paramsPartido['hora'][0] == "":
-                return[b"<script>alert('Tienes que rellenar todos los campos')</script>"]
+                return[b""]
             else:
                 sesion = modelos.abrir_sesion()
-                
                 crearPartido = modelos.evFuturos(
                 eq1=paramsPartido['eq1'],
                 eq2=paramsPartido['eq2'],
-                hora=paramsPartido['hora'],
-                dia=paramsPartido['dia'],
+                hora=paramsPartido['horainicio'],
+                dia=paramsPartido['fecha'],
                 matchday=paramsPartido['matchday'],
                 mipartido="true"
                 )
-                crearPartido.create(sesion)
+                sesion.add(crearPartido)
+                sesion.commit()
                 modelos.cerrar_sesion(sesion)
                 sesion = None
                 start_response('303 See Other', [('Location', '/gestion')])
-                return [b"<script>alert('Partido anadido correctamente')</script>"]
+                return [b""]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
@@ -207,34 +204,39 @@ def insertarPartido(environ, start_response):
 def app(environ, start_response):
     path = environ.get('PATH_INFO')
     if path == '/':
-        return vistas.indice(environ, start_response)
+        return vistas.indice(environ, start_response, usuario)
     elif path == '/contacto':
-        return vistas.contacto(environ, start_response)
+        return vistas.contacto(environ, start_response, usuario)
     elif path.startswith('/static/'):
         return vistas.serve_static(environ, start_response)
     elif path == '/sign-up':
         return crearUsuario(environ, start_response)
     elif path == '/log-in':
-        return iniciarSesion(environ, start_response)
+        usuario, sesion, hayUser = iniciar_sesion(environ, start_response)
+        return vistas.sesion_init(start_response, hayUser)
+    elif path == '/noUser':
+        return vistas.no_user_handle(environ, start_response)    
+    elif path == '/log-out':
+        finalizar_sesion(sesion)
+        sesion = None
+        return vistas.sesion_finish(start_response, hayUser)
     elif path == '/insert-game':
         return insertarPartido(environ, start_response)
-    elif path == '/index':
-        return vistas.indice(environ, start_response)
     elif path == '/calendario':
         evFuturos = leerCalendario(environ, start_response)
-        return vistas.paginaEvFuturos(environ, start_response, evFuturos)
+        return vistas.paginaEvFuturos(environ, start_response, evFuturos, usuario)
     elif path == '/equipos':
-        return vistas.equipos(environ, start_response)
+        return vistas.equipos(environ, start_response, usuario)
     elif path == '/envivo':
         enVivo = leerEnVivo(environ, start_response)
-        return vistas.paginaEnVivo(environ, start_response, enVivo)
+        return vistas.paginaEnVivo(environ, start_response, enVivo, usuario)
     elif path == '/partidosfinalizados':
         resTerminados = leerResTerminados(environ, start_response)
-        return vistas.paginaResultados(environ, start_response, resTerminados)
+        return vistas.paginaResultados(environ, start_response, resTerminados, usuario)
     elif path == '/noticias':
-        return vistas.noticias(environ, start_response)
+        return vistas.noticias(environ, start_response, usuario)
     elif path == '/gestion':
-        return vistas.gestion(environ, start_response)
+        return vistas.gestion(environ, start_response, usuario)
     else:
         return vistas.handle_404(environ, start_response)
 

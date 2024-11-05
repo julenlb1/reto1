@@ -43,16 +43,17 @@ if response.status_code == 200:
 
     i = 0
     for match in data["matches"]:
-        
         match_date = match["date"] # La fecha del partido de json
-        print(f"{match} ola")
-        match_time = match["time"] # La hora del partido de json
-        match_datetime_str = f"{match_date} {match_time}" # Uniendo las dos para hacer un datetime
-        match_datetime = datetime.strptime(match_datetime_str, "%Y-%m-%d %H:%M") # Formateo a datetime
-
+        if "time" in match:
+            match_time = match["time"] # La hora del partido de json
+            match_datetime_str = f"{match_date} {match_time}" # Uniendo las dos para hacer un datetime
+            match_datetime = datetime.strptime(match_datetime_str, "%Y-%m-%d %H:%M") # Formateo a datetime
+        else:
+            match_datetime = datetime.strptime("2000-01-01 00:00","%Y-%m-%d %H:%M")
+            
         if match_datetime.date() < hoy: # Si el dia del json es menor al actual, insertará los datos en la tabla de ResTerminados
             esmipartido = sesion.query(modelos.ResTerminados).filter_by(id=i,mipartido="false").all() # Esta consulta comprueba si el partido que va actualizar no esta en la tabla y no ha sido creado por el usuario
-            if esmipartido == "":
+            if len(esmipartido) == 0:
                 # Partidos terminados
                 resterminado = modelos.ResTerminados()
                 resterminado.id = i
@@ -68,7 +69,7 @@ if response.status_code == 200:
                 sesion.add(resterminado)
         elif match_datetime.date() == hoy: # Si el dia es el mismo, los insertará en enVivo
             esmipartido = sesion.query(modelos.enVivo).filter_by(id=i,mipartido="false").all()
-            if esmipartido == "":
+            if len(esmipartido) == 0:
                 # Partidos en vivo
                 envivo = modelos.enVivo()
                 envivo.id = i
@@ -83,7 +84,7 @@ if response.status_code == 200:
 
         else: # Si no, los insertará en evFuturos
             esmipartido = sesion.query(modelos.evFuturos).filter_by(id=i,mipartido="false").all()
-            if esmipartido == "":
+            if len(esmipartido) == 0:
                 # Partidos futuros
                 evFuturo = modelos.evFuturos()
                 evFuturo.id = i
@@ -92,8 +93,9 @@ if response.status_code == 200:
                 evFuturo.matchday = match["round"]
                 evFuturo.dia = match_date
                 evFuturo.horainicio = match_datetime.time()
+                print(evFuturo.horainicio)
                 evFuturo.mipartido = "false"
-                sesion.commit()
+                sesion.add(evFuturo)
         i += 1
     sesion.commit()
 else:
