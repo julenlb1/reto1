@@ -196,8 +196,8 @@ def insertarPartido(environ, start_response):
                 crearPartido.create(sesion)
                 modelos.cerrar_sesion(sesion)
                 sesion = None
-                start_response('303 See Other', [('Location', '/es')])
-                return [b'']
+                start_response('303 See Other', [('Location', '/gestion')])
+                return [b"<script>alert('Partido anadido correctamente')</script>"]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
