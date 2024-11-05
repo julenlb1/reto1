@@ -28,11 +28,9 @@ def serve_static(environ, start_response):
     print('static_dir', static_dir)
     #static_dir c:\*\*\DWES\Ej_mvc\static
     path = environ['PATH_INFO']
-    print('path is:', path) 
-    # path is: /static/style.css    
-    css_path = static_dir + 'partidosfinalizados.css'    
+    print('path is:', path)     
+    css_path = "C:/Users/alu01/Desktop/DAW/Codium/Py/jinja/reto1-main/static/partidosfinalizados.css"    
     print('css_path:', css_path)
-    #css_path: c:\*\*\DWES\Ej_mvc\static\style.css
     
     if not path.startswith('/static/'):
         start_response('404 Not Found', [('Content-type', 'text/plain')])

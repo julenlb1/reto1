@@ -3,18 +3,11 @@ import os
 
 env = Environment(loader=FileSystemLoader('templates'))
 print(os.path.abspath('templates'))
-template = env.get_template('index.html')
+template = env.get_template('endirecto.html')
 
 # Funciones para manejar las rutas específicas
-def english_handle_index(environ, start_response):
-    # Lógica para la ruta '/en'
-    status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
-    start_response(status, response_headers)
-    return [b'Hello, English World!']
-
-def index(environ, start_response, envivo):
-    # Lógica para la ruta 'templates/index.html'
+def paginaEnVivo(environ, start_response, envivo):
+    # Lógica para la ruta 'templates/envivo.html'
     response = template.render(envivo = envivo).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
