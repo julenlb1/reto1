@@ -70,7 +70,7 @@
       </form>
     </div>
   </div>
-
+<br><br><br><br>
   <div class="footer">
 
     <center>
@@ -125,16 +125,16 @@
     color: white;
   }
 
-  @media (max-width:480px) {
+  @media (min-width:200px) {
     .formulario {
-    display: flex;
+    display: grid;
     flex-direction: column;
     flex-basis: 100%;
     place-items: center;
     margin-top: 60px;
   }
   }
-  @media (max-width:2560px) {
+  @media (min-width:1280px) {
     .formulario {
     display: flex;
     flex-direction: row;
@@ -161,12 +161,14 @@
     margin-right: auto;
   }
 
+  
   .footer {
-    display: grid;
-    grid-template-columns: auto auto;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;  
+    flex-wrap: wrap;  
+    padding: 60px; 
+}
 
   .grid-itemFooter img {
     height: 30px;
@@ -176,6 +178,8 @@
     margin-left: 20px;
     margin-right: 20px;
   }
+
+  
 </style>
 
 </html>
