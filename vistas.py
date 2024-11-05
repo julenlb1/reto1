@@ -9,6 +9,7 @@ templateVivo = env.get_template('endirecto.html')
 templateEquipos = env.get_template('equipos.html')
 templateNoticias = env.get_template('noticias.html')
 templateResultados = env.get_template('partidosfinalizados.html')
+templateGestion = env.get_template('gestion.html')
 
 # Funciones para manejar las rutas específicas
 def indice(environ, start_response):
@@ -66,6 +67,14 @@ def noticias(environ, start_response):
 def paginaResultados(environ, start_response, resTerminados):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
     response = templateResultados.render(resTerminados = resTerminados).encode('utf-8')
+    status = '200 OK'
+    response_headers = [('Content-type', 'text/html')]
+    start_response(status, response_headers)
+    return [response]
+
+def gestion(environ, start_response):
+    # Lógica para la ruta '/templates/partidosfinalizados.html'
+    response = templateGestion.render().encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)

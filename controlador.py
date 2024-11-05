@@ -128,14 +128,14 @@ def crearUsuario(environ, start_response):
             data = environ['wsgi.input'].read(size).decode()
             paramsUsuario = parse_qs(data)      
             if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "" or paramsUsuario['password-2'] == "":
-                return[b"alert('Todos los campos deben de estar completos')"]
+                return[b"<script>alert('Todos los campos deben de estar completos')</script>"]
             else:
+                sesion = modelos.abrir_sesion()
                 usuario = modelos.Usuarios(
                 nombre=paramsUsuario['nombre'],
                 email=paramsUsuario['email'],
                 passwd=paramsUsuario['password']
                 )
-                sesion = modelos.abrir_sesion()
                 usuario.create(sesion)
                 modelos.cerrar_sesion(sesion)
                 sesion = None
@@ -196,8 +196,8 @@ def insertarPartido(environ, start_response):
                 crearPartido.create(sesion)
                 modelos.cerrar_sesion(sesion)
                 sesion = None
-                start_response('303 See Other', [('Location', '/es')])
-                return [b'']
+                start_response('303 See Other', [('Location', '/gestion')])
+                return [b"<script>alert('Partido anadido correctamente')</script>"]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
@@ -207,7 +207,7 @@ def insertarPartido(environ, start_response):
 def app(environ, start_response):
     path = environ.get('PATH_INFO')
     if path == '/':
-        return vistas.index(environ, start_response)
+        return vistas.indice(environ, start_response)
     elif path == '/contacto':
         return vistas.contacto(environ, start_response)
     elif path.startswith('/static/'):
@@ -233,6 +233,8 @@ def app(environ, start_response):
         return vistas.paginaResultados(environ, start_response, resTerminados)
     elif path == '/noticias':
         return vistas.noticias(environ, start_response)
+    elif path == '/gestion':
+        return vistas.gestion(environ, start_response)
     else:
         return vistas.handle_404(environ, start_response)
 
