@@ -12,9 +12,9 @@ templateResultados = env.get_template('partidosfinalizados.html')
 templateGestion = env.get_template('gestion.html')
 
 # Funciones para manejar las rutas específicas
-def indice(environ, start_response, usuario):
+def indice(environ, start_response, usuario, comentarioRes):
     # Lógica para la ruta 'templates/contacto.html'
-    response = template.render(usuario=usuario).encode('utf-8')
+    response = template.render(usuario=usuario, comentarioRes=comentarioRes).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -88,16 +88,23 @@ def sesion_init(start_response, hayUser):
         start_response('303 See Other', [('Location', '/noUser')])
         return [b'']
 
-def sesion_finish(start_response):
+def sesion_finish(environ, start_response):
     start_response('303 See Other', [('Location', '/')])
     return [b'']
 
 def no_user_handle(environ, start_response):
     # Lógica para la ruta '/noUser'
+    start_response('303 See Other', [('Location', '/')])
+    return [b'Usuario no encontrado, redireccionando...']
+
+def ComentarioRes(environ, start_response, comentarioRes):
+    # Lógica para la ruta '/comment-index'
+    response = template.render(comentarioRes=comentarioRes).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
-    return [b'Usuario no encontrado, redireccionando...']
+    return [response]
+
 
 def handle_404(environ, start_response):
     # Lógica para manejar una ruta no reconocida (404)

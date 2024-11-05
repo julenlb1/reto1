@@ -61,7 +61,7 @@ class enVivo(Base, miCRUD):
     matchday = Column(String)
     mipartido = Column(String)
 
-class Usuarios(Base):
+class Usuarios(Base, miCRUD):
     __tablename__ = 'usuarios'
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
@@ -89,8 +89,6 @@ class ResTerminados(Base, miCRUD):
 class escribeNot(Base):
     __tablename__ = 'escribenot'
     id = Column(Integer, primary_key=True)
-    idnot = Column(Integer, ForeignKey('noticias.id'))
-    noticia = relationship('Noticias', backref='escribeNot')
     idusuario = Column(Integer, ForeignKey('usuarios.id'))
     usuario = relationship('Usuarios', backref='escribeNot')
     nombreusuario = Column(String)

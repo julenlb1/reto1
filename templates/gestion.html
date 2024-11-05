@@ -16,8 +16,13 @@
     <a href="/equipos">Equipos</a>
     <a href="/contacto">Contacto</a>
     <div class="sesion">
-      <a href="/contacto">Iniciar sesión</a>
-      <a href="/log-out">Cerrar sesión</a>
+      {% if usuario=="" %}
+        <a href="/contacto">Iniciar sesión</a>
+      {% else %}
+        <a href="/log-out">Cerrar sesión</a>
+        <p>Usuario: {{usuario}}</p>
+      {% endif %} 
+      
       
     </div>
   </div>
