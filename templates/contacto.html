@@ -16,8 +16,11 @@
     <a href="/equipos">Equipos</a>
     <a href="/contacto">Contacto</a>
     <div class="sesion">
+      {% if not usuario=="" %}
       <a href="/gestion">Gestión</a>
-      <a href="/log-out">Cerrar sesión</a>
+        <a href="/log-out">Cerrar sesión</a>
+        <p>Usuario: {{usuario}}</p>
+      {% endif %}
       
     </div>
   </div>
@@ -37,8 +40,8 @@
                 <p>Nombre del usuario: <input type="text" name="usuario" maxlength="20"></p>
 
                 <p>Correo electrónico: <input type="email" id="mail" name="user_mail"> </p>
-                <p>Crear contraseña: <input type="password" name="password" minlength="6"  placeholder="Minimo 6 carácteres"></p>
-                <p>Repetir contraseña: <input type="password" name="password-2" minlength="6"  placeholder="Minimo 6 carácteres"></p>
+                <p>Crear contraseña: <input type="password" name="password" minlength="8"  placeholder="Minimo 6 carácteres"></p>
+                <p>Repetir contraseña: <input type="password" name="password-2" minlength="8"  placeholder="Minimo 6 carácteres"></p>
                 
                 <p>
                   <input type="submit" value="Registrarse" class="registro">
@@ -50,9 +53,9 @@
         <div class="iniciarSesion"> <h3>Iniciar Sesión:</h3>
 
             <form action="/log-in" method="post">
-            <p>Usuario: <input type="text" name="usuario" maxlength="6"></p>
+            <p>Usuario: <input type="text" name="usuario" id="usuario" maxlength="20"></p>
 
-            <p>Contraseña: <input type="password" name="password" minlength="8"></p>
+            <p>Contraseña: <input type="password" name="password" id="password" minlength="8"></p>
             
             <p>
                 <input type="submit" value="Iniciar sesión" class="iniciasesion">

@@ -16,9 +16,14 @@
     <a href="/equipos">Equipos</a>
     <a href="/contacto">Contacto</a>
     <div class="sesion">
+      {% if usuario=="" %}
+        <a href="/contacto">Iniciar sesión</a>
+      {% else %}
       <a href="/gestion">Gestión</a>
-      <a href="/contacto">Iniciar sesión</a>
-      <a href="/log-out">Cerrar sesión</a>
+        <a href="/log-out">Cerrar sesión</a>
+        <p>Usuario: {{usuario}}</p>
+      {% endif %} 
+      
       
     </div>
   </div>
@@ -71,8 +76,12 @@
         <h4>Déjanos tu opinión:</h4>
         <form id="comentarioFormulario">
             <textarea name="texto" rows="4" cols="40" placeholder="Escribe tu comentario" required></textarea><br>
+            {% if not usuario == "" %}
             <input type="submit" value="Enviar" class="enviar">
             <input type="reset" value="Borrar" class="borrar">
+            {% else %}
+            <h5 style="color: rgb(255, 66, 66);"><a href="/contacto">Inicia sesión</a> para comentar</h5>
+            {% endif %}
         </form>
         <div class="listaComentarios" id="listaComentarios">
             <h4>Comentarios:</h4>
