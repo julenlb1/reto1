@@ -4,26 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto</title>
-    <link rel="shortcut icon" href="logos/logoPagina.webp" alt="logo"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
 </head>
 <body >
-  <div class="menu">
-    <a href="/">Inicio</a>
-    <a href="/noticias">Noticias</a>
-    <a href="/partidosfinalizados">Partidos finalizados</a>
-    <a href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-    <a href="/calendario">Calendario</a>
-    <a href="/equipos">Equipos</a>
-    <a href="/contacto">Contacto</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/noticias">Noticias</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/calendario">Calendario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/equipos">Equipos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contacto">Equipos</a>
+    </li>
     <div class="sesion">
-      {% if not usuario=="" %}
+      {% if usuario=="" %}
+      <a href="/contacto">Iniciar sesión</a>
+      {% else %}
       <a href="/gestion">Gestión</a>
-        <a href="/log-out">Cerrar sesión</a>
-        <p>Usuario: {{usuario}}</p>
+      <a href="/log-out">Cerrar sesión</a>
+      <p>Usuario: {{usuario}}</p>
       {% endif %}
-      
     </div>
-  </div>
+        
+        </ul>
+        
+    </div>
+  </nav>
     
         <center><h1>Contacto</h1></center>
         <div class="texto1">¿Tienes alguna pregunta o comentario sobre la Liga Española de Fútbol? Nos encantaría saber de ti. Ya sea que quieras compartir tus opiniones, sugerencias o solicitar información adicional, estamos aquí para ayudarte.
@@ -261,6 +287,8 @@
 }
     </style>
 
-   
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
     
 </html>
