@@ -1,51 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-* {
-  box-sizing: border-box;
-}
-
-.flex-container {
-  display: flex;
-  flex-direction: row;
-  font-size: 30px;
-  text-align: center;
-}
-
-.flex-item-left {
-  background-color: #f1f1f1;
-  padding: 10px;
-  flex: 50%;
-}
-
-.flex-item-right {
-  background-color: dodgerblue;
-  padding: 10px;
-  flex: 50%;
-}
-
-/* Responsive layout - makes a one column-layout instead of two-column layout */
-@media (max-width: 800px) {
-  .flex-container {
-    flex-direction: column;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/noticias">Noticias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/calendario">Calendario</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/equipos">Equipos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contacto">Equipos</a>
+        </li>
+        <div class="sesion">
+          {% if usuario=="" %}
+          <a href="/contacto">Iniciar sesión</a>
+          {% else %}
+          <a href="/gestion">Gestión</a>
+          <a href="/log-out">Cerrar sesión</a>
+          <p>Usuario: {{usuario}}</p>
+          {% endif %}
+        </div>
+            
+            </ul>
+            
+        </div>
+      </nav>
 
-<h1>Responsive Flexbox</h1>
 
-<p>The "flex-direction: row;" stacks the flex items horizontally (from left to right).</p>
-<p>The "flex-direction: column;" stacks the flex items vertically (from top to bottom).</p>
-<p><b>Resize the browser window to see that the direction changes when the 
-screen size is 800px wide or smaller.</b></p>
 
-<div class="flex-container">
-  <div class="flex-item-left">1</div>
-  <div class="flex-item-right">2</div>
-</div>
 
+    {%for matchday in matchdays%}
+    <ul>
+        <li>{{}}</li>
+    </ul>
+    {%endfor%}
 </body>
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
 </html>
