@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noticias</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    rel="shortcut icon" href="logos/logoPagina.webp" alt="logo">
 </head>
+
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -17,9 +18,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Inicio</a>
+          <a class="nav-link" href="/">Inicio</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="/noticias">Noticias</a>
         </li>
         <li class="nav-item">
@@ -34,181 +35,168 @@
         <li class="nav-item">
           <a class="nav-link" href="/equipos">Equipos</a>
         </li>
+        {% if usuario=="" %}
         <li class="nav-item">
-          <a class="nav-link" href="/contacto">Equipos</a>
+          <a class="nav-link" href="/contacto">Iniciar sesión/crear cuenta</a>
         </li>
 
-        <div class="sesion">
-          {% if usuario=="" %}
-          <li class="nav-item">
-            <a class="nav-link" href="/contacto">Iniciar sesión</a>
-          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/gestion">Gestión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/log-out">Cerrar sesión</a>
+        </li>
+        <li class="nav-item">
+          <p>Usuario: {{ usuario }}</p>
+        </li>
 
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/gestion">Gestión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/log-out">Cerrar sesión</a>
-          </li>
-          <li class="nav-item">
-            <p>Usuario: {{usuario}}</p>
-          </li>
-
-          {% endif %}
-        </div>
+        {% endif %}
 
       </ul>
 
     </div>
   </nav>
-    
-        <center><h1>Noticias</h1></center>
-      <div class="grid-container">
 
-        <div> <center><img src="anuncios/anuncio1.jpg"  height="400px" width="150px"> </center></div>
-        <div class="noticia">
-            <h3>Aquí te contamos cómo el Barcelona ganó al Real Madrid en la Liga.</h3>
-            <p>El Barça jugó increíble en el estadio del Real Madrid. Raphinha y Lamine Yamal marcaron un gol cada uno, después
-               de que Robert Lewandowski ya hubiera hecho dos goles. Lewandowski fue muy rápido y anotó en solo dos minutos, a 
-               los 53 y 55 del partido. El Real Madrid no pudo hacer nada para cambiar el resultado. </p><br>
+  <center>
+    <h1>Noticias</h1>
+  </center>
+  <div class="grid-container">
 
-               <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
+    <div>
+      <center><img src="anuncios/anuncio1.jpg" height="400px" width="150px"> </center>
+    </div>
+    <div class="noticia">
+      <h3>Aquí te contamos cómo el Barcelona ganó al Real Madrid en la Liga.</h3>
+      <p>El Barça jugó increíble en el estadio del Real Madrid. Raphinha y Lamine Yamal marcaron un gol cada uno,
+        después
+        de que Robert Lewandowski ya hubiera hecho dos goles. Lewandowski fue muy rápido y anotó en solo dos minutos, a
+        los 53 y 55 del partido. El Real Madrid no pudo hacer nada para cambiar el resultado. </p><br>
 
-        </div>
+      <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
+
+    </div>
 
 
-        <div> <center><img src="anuncios/anuncio2.jpg"  height="400px" width="150px"> </center></div>
+    <div>
+      <center><img src="anuncios/anuncio2.jpg" height="400px" width="150px"> </center>
+    </div>
 
 
-        <div><center> <img src="anuncios/anuncio3.jpeg"  height="400px" width="150px"></center></div>
-        <div class="noticia">
-            <h3>El Betis ganó al Atlético de Madrid en su estadio, el Villamarín.</h3>
-            <p>El Betis empezó ganando muy rápido porque un jugador del Atlético, Giménez, metió un gol en su propia portería. Durante
-               los primeros 45 minutos, el Atlético no pudo hacer mucho y estaba en problemas. En la segunda parte, intentaron mejorar, 
-               pero no pudieron hacer más goles.</p><br>
+    <div>
+      <center> <img src="anuncios/anuncio3.jpeg" height="400px" width="150px"></center>
+    </div>
+    <div class="noticia">
+      <h3>El Betis ganó al Atlético de Madrid en su estadio, el Villamarín.</h3>
+      <p>El Betis empezó ganando muy rápido porque un jugador del Atlético, Giménez, metió un gol en su propia portería.
+        Durante
+        los primeros 45 minutos, el Atlético no pudo hacer mucho y estaba en problemas. En la segunda parte, intentaron
+        mejorar,
+        pero no pudieron hacer más goles.</p><br>
 
-               <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
-        </div>
-        <div><center> <img src="anuncios/anuncio4.gif"  height="400px" width="150px"></center></div>
-           
-        
-        <div><center> <img src="anuncios/anuncio5.jpg"  height="400px" width="150px"></center></div>
-        <div class="noticia">
-            <h3>El resultado del partido entre el Real Madrid y el Barcelona fue 0-4. Eso significa que el Barcelona ganó, ¡y lo hizo muy bien!</h3>
-            <p>Carlo Ancelotti, el entrenador del Real Madrid, fue muy criticado por la derrota de 0-4. No pudo encontrar una manera de hacer que su
-               equipo jugara mejor contra la defensa del Barcelona, que los atrapaba en fuera de juego. Esto ha pasado muchas veces este año con otros
-               equipos también. Además, después del descanso, el Real Madrid no mejoró. Mbappé, uno de sus jugadores, estuvo en fuera de juego
-                ocho veces y falló tres oportunidades de gol claras.</p><br>
+      <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
+    </div>
+    <div>
+      <center> <img src="anuncios/anuncio4.gif" height="400px" width="150px"></center>
+    </div>
 
-               <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
-        </div>
-        <div><center> <img src="anuncios/anuncio6.gif"  height="400px" width="150px"></center></div>
-        
+
+    <div>
+      <center> <img src="anuncios/anuncio5.jpg" height="400px" width="150px"></center>
+    </div>
+    <div class="noticia">
+      <h3>El resultado del partido entre el Real Madrid y el Barcelona fue 0-4. Eso significa que el Barcelona ganó, ¡y
+        lo hizo muy bien!</h3>
+      <p>Carlo Ancelotti, el entrenador del Real Madrid, fue muy criticado por la derrota de 0-4. No pudo encontrar una
+        manera de hacer que su
+        equipo jugara mejor contra la defensa del Barcelona, que los atrapaba en fuera de juego. Esto ha pasado muchas
+        veces este año con otros
+        equipos también. Además, después del descanso, el Real Madrid no mejoró. Mbappé, uno de sus jugadores, estuvo en
+        fuera de juego
+        ocho veces y falló tres oportunidades de gol claras.</p><br>
+
+      <center> <img src="noticias/" alt="" height="220px" width="435px"></center>
+    </div>
+    <div>
+      <center> <img src="anuncios/anuncio6.gif" height="400px" width="150px"></center>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById('comentarioFormulario').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const textarea = this.querySelector('textarea[name="texto"]');
+      const nuevoComentario = textarea.value;
+
+      // Crear nuevo div para el nuevo comentario.
+      const comentarioDiv = document.createElement('div');
+      comentarioDiv.textContent = nuevoComentario;
+
+      // Añadir el nuevo comentario.
+      document.getElementById('listaComentarios').appendChild(comentarioDiv);
+
+      // Limpiar cuando le des al boton enviar.
+      textarea.value = '';
+    }
+    )
+  </script>
+
+  <div class="footer">
+    <center>
+      <div class="grid-itemFooter">
+        <h4>Copyright</h4>
+        <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
       </div>
-    
-    <script>
-        document.getElementById('comentarioFormulario').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-    
-            const textarea = this.querySelector('textarea[name="texto"]');
-            const nuevoComentario = textarea.value;
-    
-            // Crear nuevo div para el nuevo comentario.
-            const comentarioDiv = document.createElement('div');
-            comentarioDiv.textContent = nuevoComentario;
-    
-            // Añadir el nuevo comentario.
-            document.getElementById('listaComentarios').appendChild(comentarioDiv);
-    
-            // Limpiar cuando le des al boton enviar.
-            textarea.value = '';
-        }
-        )
-    </script>
-    
-    <div class="footer">
-      <center>
-          <div class="grid-itemFooter">
-              <h4>Copyright</h4>
-              <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
-          </div>
-      </center>
-      <center>
-        <div class="grid-itemFooter">
-          <h4>Redes sociales</h4>
-          <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.png"></a>
-          <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
-          <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
-          <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.png"></a>
-  
+    </center>
+    <center>
+      <div class="grid-itemFooter">
+        <h4>Redes sociales</h4>
+        <a href="https://www.instagram.com/laliga/"><img src="../static/logos/logoInsta.png"></a>
+        <a href="https://x.com/laliga"><img src="../static/logos/logoTwitter.png"></a>
+        <a href="https://www.facebook.com/la.liga/"><img src="../static/logos/logoFacebook.png"></a>
+        <a href="https://www.tiktok.com/@laliga"><img src="../static/logos/logoTiktok.png"></a>
+
       </div>
-      </center>
+    </center>
   </div>
 
 </body>
 
 <style>
-    
-    body {
-      margin: 0;
-      font-family: Helvetica;
-      background-color: #161616;
-      color:white;
-    }
-
-    h3{
-        color:rgb(212, 204, 204);
-    }
-
-    p{
-        font-size: 14px;
-    }
-
-    
-    
-    .menu {
-    overflow: hidden;
-    background-color: #333;
-  }
-
-  .menu a {
-    float: left;
+  body {
+    margin: 0;
+    font-family: Helvetica;
+    background-color: #161616;
     color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 15px;
   }
 
-  .sesion a{
-    float: right;
-    text-align: center;
-    text-decoration: none;
+  h3 {
+    color: rgb(212, 204, 204);
   }
 
-  .menu a:hover {
-    background-color: #ddd;
-    color: black;
+  p {
+    font-size: 14px;
   }
-    
-    .grid-container {
-      display: grid;
-      grid-template-columns: 25% 50% 25%;
-      grid-gap: 5px;
-      padding: 5px;
-    }
 
-    .grid-container > div {
-      padding: 10px ;
-      margin-top:20px;
-    }
-   
-    .noticia{
-      text-align: justify;
-    }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-gap: 5px;
+    padding: 5px;
+  }
 
-    .footer {
+  .grid-container>div {
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  .noticia {
+    text-align: justify;
+  }
+
+  .footer {
     display: flex;
     width: 100%;
     flex-direction: row;
@@ -216,84 +204,113 @@
     margin-bottom: 30px;
     justify-content: center;
     position: relative;
-
     bottom: 0;
   }
 
-    .grid-itemFooter img{
-      height: 30px;
-      width: 30px;
-      border-radius: 26%;
-      justify-content: center;
-      margin-left: 20px;
-      margin-right: 20px;
+  .grid-itemFooter img {
+    height: 30px;
+    width: 30px;
+    border-radius: 26%;
+    justify-content: center;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .grid-itemFooter h4 {
+    text-align: center;
+  }
+
+  .seccionComentarios {
+    margin: 20px;
+    padding: 20px;
+    background-color: #414040;
+    border-radius: 5px;
+  }
+
+
+  .listaComentarios {
+    margin-top: 15px;
+    border-top: 1px solid #b1afaf;
+    padding-top: 10px;
+  }
+
+  .enviar {
+    height: 30px;
+    width: 70px;
+    background-color: rgb(51, 255, 0);
+    animation-name: example1;
+    animation-duration: 6s;
+    border-radius: 8px;
+  }
+
+  @keyframes example1 {
+    0% {
+      background-color: rgb(255, 217, 0);
     }
 
-    .grid-itemFooter h4{
-      text-align: center;
+    25% {
+      background-color: yellow;
     }
 
-    .seccionComentarios {
-      margin: 20px;
-      padding: 20px;
-      background-color: #414040;
-      border-radius: 5px;
-    }
-    
-
-    .listaComentarios {
-      margin-top: 15px;
-      border-top: 1px solid #b1afaf;
-      padding-top: 10px;
+    50% {
+      background-color: rgb(72, 255, 0);
     }
 
-    .enviar{
-            height:30px;
-            width:70px;
-            background-color: rgb(51, 255, 0);
-            animation-name: example1;
-            animation-duration: 6s;
-            border-radius: 8px;
-        }
+    100% {
+      background-color: green;
+    }
+  }
 
-        @keyframes example1 {
-  0%   {background-color: rgb(255, 217, 0);}
-  25%  {background-color: yellow;}
-  50%  {background-color: rgb(72, 255, 0);}
-  100% {background-color: green;}
-}
-   
-  .borrar{
-            height:30px;
-            width:70px;
-            border-radius: 8px;
-            background-color: rgb(255, 0, 0);
-            animation-name: example2;
-            animation-duration: 6s;
-        }
+  .borrar {
+    height: 30px;
+    width: 70px;
+    border-radius: 8px;
+    background-color: rgb(255, 0, 0);
+    animation-name: example2;
+    animation-duration: 6s;
+  }
 
-        @keyframes example2 {
-  0%   {background-color: rgb(255, 0, 0);}
-  25%  {background-color: rgb(223, 78, 78);}
-  50%  {background-color: rgb(165, 48, 48);}
-  100% {background-color: rgba(128, 0, 28, 0.541);}
-}
-  
-.circle {
+  @keyframes example2 {
+    0% {
+      background-color: rgb(255, 0, 0);
+    }
+
+    25% {
+      background-color: rgb(223, 78, 78);
+    }
+
+    50% {
+      background-color: rgb(165, 48, 48);
+    }
+
+    100% {
+      background-color: rgba(128, 0, 28, 0.541);
+    }
+  }
+
+  .circle {
     content: " ";
     display: inline-block;
     border-radius: 50%;
     background-color: red;
     color: red;
     border: 1px red solid;
-    width:10px; /*misma altura y anchura*/
+    width: 10px;
+    /*misma altura y anchura*/
     height: 10px;
     margin-left: 10px;
-   
-}
-   
-    </style>
-    <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
+
+  }
+
+  .active{
+    background-color: rgb(167, 167, 167);
+    
+  }
+
+  .active>a{
+    color: black;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>

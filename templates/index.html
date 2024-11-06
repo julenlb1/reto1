@@ -17,8 +17,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="/">Inicio</a>
+        <li class="nav-item active">
+          <a class="nav-link " href="/">Inicio</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/noticias">Noticias</a>
@@ -35,29 +35,23 @@
         <li class="nav-item">
           <a class="nav-link" href="/equipos">Equipos</a>
         </li>
+        {% if usuario=="" %}
         <li class="nav-item">
-          <a class="nav-link" href="/contacto">Equipos</a>
+          <a class="nav-link" href="/contacto">Iniciar sesión/crear cuenta</a>
         </li>
 
-        <div class="sesion">
-          {% if usuario=="" %}
-          <li class="nav-item">
-            <a class="nav-link" href="/contacto">Iniciar sesión</a>
-          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/gestion">Gestión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/log-out">Cerrar sesión</a>
+        </li>
+        <li class="nav-item">
+          <p>Usuario: {{ usuario }}</p>
+        </li>
 
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/gestion">Gestión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/log-out">Cerrar sesión</a>
-          </li>
-          <li class="nav-item">
-            <p>Usuario: {{usuario}}</p>
-          </li>
-
-          {% endif %}
-        </div>
+        {% endif %}
 
       </ul>
 
@@ -73,7 +67,7 @@
   <div class="seccionComentarios">
     <h4>Déjanos tu opinión:</h4>
     <form id="comentarioFormulario" method="post" action="/comentario-index">
-      <textarea name="texto" rows="4" cols="40" placeholder="Escribe tu comentario" id="comentario"
+      <textarea name="comentario" rows="4" cols="40" placeholder="Escribe tu comentario" id="comentario"
         required></textarea><br>
       {% if not usuario == "" %}
       <input type="submit" value="Enviar" class="enviar">
@@ -106,10 +100,10 @@
     <center>
       <div class="grid-itemFooter">
         <h4>Redes sociales</h4>
-        <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.png"></a>
-        <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
-        <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
-        <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.png"></a>
+        <a href="https://www.instagram.com/laliga/"><img src="../static/logos/logoInsta.png"></a>
+        <a href="https://x.com/laliga"><img src="../static/logos/logoTwitter.png"></a>
+        <a href="https://www.facebook.com/la.liga/"><img src="../static/logos/logoFacebook.png"></a>
+        <a href="https://www.tiktok.com/@laliga"><img src="../static/logos/logoTiktok.png"></a>
 
       </div>
     </center>
@@ -125,8 +119,6 @@
     font-family: Helvetica;
     color: white;
   }
-
-
 
   .dias {
     margin-top: 30px;
@@ -148,7 +140,7 @@
     background-color: #333;
   }
 
-  .sesion a{
+  .sesion a {
     float: right;
     text-align: center;
     text-decoration: none;
@@ -162,8 +154,7 @@
     margin-bottom: 30px;
     justify-content: center;
     position: relative;
-
-    bottom: 0%;
+    bottom: 0;
   }
 
   .grid-itemFooter img {
@@ -205,6 +196,15 @@
     height: 10px;
     margin-left: 10px;
 
+  }
+
+  .active{
+    background-color: rgb(167, 167, 167);
+    
+  }
+
+  .active>a{
+    color: black;
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

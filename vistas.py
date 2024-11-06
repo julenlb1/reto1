@@ -47,8 +47,6 @@ def paginaEnVivo(environ, start_response, envivo, usuario):
 def equipos(environ, start_response, usuario):
     # Lógica para la ruta 'templates/equipos.html'
     response = templateEquipos.render(usuario=usuario).encode('utf-8')
-    print("template render")
-    print(b"" + response)
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -57,8 +55,6 @@ def equipos(environ, start_response, usuario):
 def noticias(environ, start_response, usuario):
     # Lógica para la ruta 'templates/noticias.html'
     response = templateNoticias.render(usuario=usuario).encode('utf-8')
-    print("template render")
-    print(b"" + response)
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -106,27 +102,37 @@ def handle_404(environ, start_response):
     return [b'Page not found']
 
 # Función para servir archivos estáticos
+
 def serve_static(environ, start_response):     
-    static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static'))
-    print('static_dir', static_dir)
-    #static_dir c:\*\*\DWES\Ej_mvc\static
+    static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')) #  Aqui conseguimos la ruta a static
     path = environ['PATH_INFO']
-    print('path is:', path) 
-    # path is: /static/style.css    
-    css_path = static_dir + '\\style.css'    
-    print('css_path:', css_path)
-    #css_path: c:\*\*\DWES\Ej_mvc\static\style.css
-    
     if not path.startswith('/static/'):
         start_response('404 Not Found', [('Content-type', 'text/plain')])
         return [b'Not Found']
-    else:
-        # Serve the file
+    file_path = os.path.join(static_dir, path[len('/static/'):]) # Aqui conseguimos la ruta completa al archivo
+
+
+    if os.path.isfile(file_path): # Con esta condicion deducimos el tipo de archivo por su extension
         try:
-            with open(css_path, 'rb') as file:
-                cssFile = file.read()
-                start_response('200 OK', [('Content-type', 'text/css')]) 
-                return [cssFile]            
+            if file_path.endswith('.png'):
+                content_type = 'image/png'
+            elif file_path.endswith('.jpg') or file_path.endswith('.jpeg'):
+                content_type = 'image/jpeg'
+            elif file_path.endswith('.webp'):
+                content_type = 'image/webp'
+            else:
+                content_type = 'application/octet-stream'
+
+            # Servir el archivo (Imagenes)
+            with open(file_path, 'rb') as file:
+                file_content = file.read()
+                start_response('200 OK', [('Content-type', content_type)]) 
+                return [file_content]
+                
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
+    else:
+        # Si el archivo no se encuentra
+        start_response('404 Not Found', [('Content-type', 'text/plain')])
+        return [b'Not Found']

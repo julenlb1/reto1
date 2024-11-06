@@ -6,6 +6,7 @@ from modelos import ResTerminados
 from modelos import enVivo
 from modelos import evFuturos
 from modelos import escribeRes
+import os
 
 usuario = ""
 hayUser = False
@@ -60,6 +61,7 @@ def leerComIndex(environ, start_response):  # Función para hacer una query de l
     return comentarios
 
 def ponerComentarioRes(environ, start_response):
+    global usuario
     if environ['REQUEST_METHOD'] == 'POST':
         try:
             size = int(environ.get('CONTENT_LENGTH', 0))
@@ -68,18 +70,15 @@ def ponerComentarioRes(environ, start_response):
             comentario = paramsComentario.get('comentario', [None])[0] 
             
             if not usuario:
-                return["<script>alert('No has iniciado sesion (aunque no se como has enviado el comentario)')</script>"]
+                return[b"<script type=text/javascript>alert('No has iniciado sesion')</script>"]
             else:
-                sesion = modelos.abrir_sesion()
+                print(f"usuario:{usuario}, idUsuario:{idUsuario}, comentario:{comentario}")
                 escribeRes = modelos.escribeRes(
                 idusuario=idUsuario,
                 usuario=usuario,
                 comentario=comentario,
-                likes=0
                 )
-                escribeRes.create(sesion)
-                modelos.cerrar_sesion(sesion)
-                sesion = None
+                escribeRes.create(UserSesion)
                 start_response('303 See Other', [('Location', '/')])
                 return [b'']
         except Exception as e:
@@ -101,7 +100,24 @@ def crearUsuario(environ, start_response):
             
             if usuario == None or email == None or contrasena == None or contrasena2 == None:
                 start_response('303 See Other', [('Location', '/contacto')])
-                return [b"<script>alert('Todos los campos deben estar completos')</script>"]
+                start_response('200 OK', [('Content-type', 'text/html')])
+                html_response = """
+                <html>
+                <head>
+                    <title>Error</title>
+                </head>
+                <body>
+                    <h2>Inserta todos los datos necesarios</h2>
+                    <p>Seras redirigido al inicio en 3 segundos...</p>
+                    <script type="text/javascript">
+                        setTimeout(function() {
+                            window.location.href = '/';
+                        }, 3000);
+                    </script>
+                </body>
+                </html>
+                """
+                return [html_response.encode('utf-8')]
             else:
                 sesion = modelos.abrir_sesion()
                 cUsuario = modelos.Usuarios(
@@ -115,10 +131,21 @@ def crearUsuario(environ, start_response):
                 modelos.cerrar_sesion(sesion)
                 
                 sesion = None
-                print("prueba")
-                start_response('303 See Other', [('Location', '/contacto')])
-                print("prueba")
-                return [b"<script>alert('Cuenta creada correctamente')</script>"]
+                start_response('200 OK', [('Content-type', 'text/html')])
+                html_response = f"""
+                <html>
+                <head>
+                    <title>Cuenta creada</title>
+                </head>
+                <body>
+                    <h2>Cuenta creada correctamente</h2>
+                    <p>Nombre de usuario: {usuario}</p>
+                    <p>Correo: {email}</p> 
+                    <button><a href="/">Volver al inicio</a></button>
+                </body>
+                </html>
+                """
+                return [html_response.encode('utf-8')]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
@@ -126,11 +153,11 @@ def crearUsuario(environ, start_response):
         return vistas.handle_404(environ, start_response)
 
 def iniciar_sesion(environ, start_response):
-    global usuario, UserSesion, hayUser, idUsuario
     if environ['REQUEST_METHOD'] == 'POST':
         size = int(environ.get('CONTENT_LENGTH', 0))
         data = environ['wsgi.input'].read(size).decode()
         params = parse_qs(data)
+        global usuario, UserSesion, hayUser, idUsuario
         usuario = params.get('usuario', [None])[0]
         contrasena = params.get('password', [None])[0]
         UserSesion = modelos.abrir_sesion()
@@ -140,6 +167,7 @@ def iniciar_sesion(environ, start_response):
             hayUser = True
             for usuario in usuarios:
                 idUsuario = usuario.id
+            
             return usuario, UserSesion, hayUser, idUsuario
         else:
             UserSesion.close()
@@ -160,19 +188,36 @@ def insertarPartido(environ, start_response):
             data = environ['wsgi.input'].read(size).decode()
             paramsPartido = parse_qs(data)      
             eq1 = paramsPartido.get('eq1', [None])[0]
-            eq1 = paramsPartido.get('eq2', [None])[0]
+            eq2 = paramsPartido.get('eq2', [None])[0]
             dia = paramsPartido.get('fecha', [None])[0]
             hora = paramsPartido.get('horainicio', [None])[0]
             matchday = paramsPartido.get('matchday', [None])[0]
             if eq1 == None or eq2 == None or dia == None or hora == None or matchday == None:
-                start_response('303 See Other', [('Location', '/gestion')])
-                return[b"Inserta todos los datos necesarios"]
+                print(f"eq1:{eq1}; eq2:{eq2}; dia:{dia}; hora:{hora}; matchday:{matchday};")
+                start_response('200 OK', [('Content-type', 'text/html')])
+                html_response = """
+                <html>
+                <head>
+                    <title>Error</title>
+                </head>
+                <body>
+                    <h2>Inserta todos los datos necesarios</h2>
+                    <p>Seras redirigido al inicio en 3 segundos...</p>
+                    <script type="text/javascript">
+                        setTimeout(function() {
+                            window.location.href = '/';
+                        }, 3000);
+                    </script>
+                </body>
+                </html>
+                """
+                return [html_response.encode('utf-8')]
             else:
                 sesion = modelos.abrir_sesion()
                 crearPartido = modelos.evFuturos(
                 eq1=eq1,
                 eq2=eq2,
-                hora=hora,
+                horainicio=hora,
                 dia=dia,
                 matchday=matchday,
                 mipartido="true"
@@ -205,6 +250,7 @@ def app(environ, start_response):
         return crearUsuario(environ, start_response)
     elif path == '/log-in':
         usuario, UserSesion, hayUser, idUsuario = iniciar_sesion(environ, start_response)
+        print(usuario)
         return vistas.sesion_init(start_response, hayUser)
     elif path == '/noUser':
         return vistas.no_user_handle(environ, start_response)    
@@ -237,7 +283,7 @@ def app(environ, start_response):
 
 if __name__ == "__main__":
     host = 'localhost'
-    port = 8000
+    port = 5555
 
     httpd = make_server(host, port, app)
     print(f"Servidor en http://{host}:{port}")

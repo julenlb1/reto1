@@ -19,12 +19,12 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Inicio</a>
+          <a class="nav-link" href="/">Inicio</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/noticias">Noticias</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
         </li>
         <li class="nav-item">
@@ -36,29 +36,23 @@
         <li class="nav-item">
           <a class="nav-link" href="/equipos">Equipos</a>
         </li>
+        {% if usuario=="" %}
         <li class="nav-item">
-          <a class="nav-link" href="/contacto">Equipos</a>
+          <a class="nav-link" href="/contacto">Iniciar sesión/crear cuenta</a>
         </li>
 
-        <div class="sesion">
-          {% if usuario=="" %}
-          <li class="nav-item">
-            <a class="nav-link" href="/contacto">Iniciar sesión</a>
-          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/gestion">Gestión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/log-out">Cerrar sesión</a>
+        </li>
+        <li class="nav-item">
+          <p>Usuario: {{ usuario }}</p>
+        </li>
 
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/gestion">Gestión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/log-out">Cerrar sesión</a>
-          </li>
-          <li class="nav-item">
-            <p>Usuario: {{usuario}}</p>
-          </li>
-
-          {% endif %}
-        </div>
+        {% endif %}
 
       </ul>
 
@@ -71,17 +65,17 @@
 
   {% for jornada, dias in resTerminados.items() %}
   <center>
-    <h3>{{ jornada }}</h3>
+    <h3 style="margin: 3% 0% 0% 0%;">{{ jornada }}</h3>
   </center>
   {% for dia, partidos in dias.items() %}
   <center>
-    <h4>{{dia}}</h4>
+    <h4 style="margin: 2% 0% 1% 0%;">{{dia}}</h4>
   </center>
   {% for partido in partidos %}
   <div class="resultados">
     <!-- partido -->
     <div class="partido">
-      <img src="../static/{{partido.eq2}}.png" height="60px" width="50px"><br>
+      <img src="../static/equipos/{{partido.eq1  | replace(' ', '')}}.png" height="60px" width="50px"><br>
       <strong>{{partido.eq1}}</strong>
     </div>
     <div class="goles1">{{partido.reseq1}}</div>
@@ -90,7 +84,7 @@
     </div>
     <div class="goles2">{{partido.reseq2}}</div>
     <div class="partido">
-      <img src="../static/{{partido.eq2}}.png" height="60px" width="50px"><br>
+      <img src="../static/equipos/{{partido.eq2  | replace(' ', '')}}.png" height="60px" width="50px"><br>
       <strong>{{partido.eq2}}</strong>
     </div>
   </div>
@@ -111,10 +105,10 @@
     <center>
       <div class="grid-itemFooter">
         <h4>Redes sociales</h4>
-        <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.png"></a>
-        <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
-        <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
-        <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.png"></a>
+        <a href="https://www.instagram.com/laliga/"><img src="../static/logos/logoInsta.png"></a>
+        <a href="https://x.com/laliga"><img src="../static/logos/logoTwitter.png"></a>
+        <a href="https://www.facebook.com/la.liga/"><img src="../static/logos/logoFacebook.png"></a>
+        <a href="https://www.tiktok.com/@laliga"><img src="../static/logos/logoTiktok.png"></a>
 
       </div>
     </center>
@@ -128,56 +122,43 @@
     color: white;
   }
 
-  .menu {
-    overflow: hidden;
-    background-color: #333;
-  }
-
-  .menu a {
-    float: left;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 15px;
-  }
-
-  .sesion a {
-    float: right;
-    text-align: center;
-    text-decoration: none;
-  }
-
-  .menu a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
   .resultados {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto;
-    gap: 30px;
+    display: flex;
+    flex-direction: row;
+    width:auto;
+    padding: 1% 0% 1% 0%;
+    background-color: rgb(17, 17, 17);
   }
 
   .partido {
     text-align: center;
+    margin: 0%;
+    width: 25%;
   }
 
   .VS {
     text-align: center;
-    margin-right: 70px;
+    margin: 0%;
+    width: 2%;
+    
+  }
+
+  .VS > h3{
+    vertical-align:bottom;
   }
 
   .goles1 {
     margin-top: 15px;
     font-size: 40px;
-    margin-left: 100px;
+    margin: 0% 22% 0% 0%;
+    width: 2%;
   }
 
   .goles2 {
     margin-top: 15px;
     font-size: 40px;
-    margin-left: 50px;
+    margin: 0% 0% 0% 22%;
+    width: 2%;
   }
 
   .footer {
@@ -188,7 +169,7 @@
     margin-bottom: 30px;
     justify-content: center;
     position: relative;
-    bottom: 0%;
+    bottom: 0;
   }
 
   .grid-itemFooter img {
@@ -217,6 +198,15 @@
     height: 10px;
     margin-left: 10px;
 
+  }
+
+  .active{
+    background-color: rgb(167, 167, 167);
+    
+  }
+
+  .active>a{
+    color: black;
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
