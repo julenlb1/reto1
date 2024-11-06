@@ -134,11 +134,13 @@
 
   @media (min-width:200px) {
     .formulario {
-    display: grid;
+    display: flex;
     flex-direction: column;
     flex-basis: 100%;
     place-items: center;
     margin-top: 60px;
+    padding-left: 80px;
+    
   }
   }
   @media (min-width:1280px) {
@@ -155,6 +157,7 @@
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+   
   }
 
   .formulario > h2 {
@@ -166,26 +169,46 @@
   .formulario > .partidoFuturo {
     margin-left: auto;
     margin-right: auto;
+    
   }
 
   
   .footer {
-    display: flex;
-    justify-content: space-between;  
-    align-items: center;  
-    flex-wrap: wrap;  
-    padding: 60px; 
-}
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 30px;
+      margin-bottom: 30px;
+      padding: 10px;
+    }
 
-  .grid-itemFooter img {
-    height: 30px;
-    width: 30px;
-    border-radius: 26%;
-    justify-content: center;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+    .grid-itemFooter img {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      margin: 10px;
+      display: inline-block;
+    }
 
+    @media (max-width: 768px) {
+      .formulario {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .grid-itemFooter {
+        margin: 10px 0;
+      }
+
+      .partidoFuturo,
+      .partidoJugado {
+        width: 100%;
+      }
+    }
   
 </style>
 
