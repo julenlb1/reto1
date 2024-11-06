@@ -5,51 +5,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Partidos por disputar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    rel="shortcut icon" href="logos/logoPagina.webp" alt="logo">
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link active" href="/">Inicio</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/noticias">Noticias</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/calendario">Calendario</a>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/noticias">Noticias</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendario">Calendario</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/equipos">Equipos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/contacto">Equipos</a>
-    </li>
-    <div class="sesion">
-      {% if usuario=="" %}
-      <a href="/contacto">Iniciar sesión</a>
-      {% else %}
-      <a href="/gestion">Gestión</a>
-      <a href="/log-out">Cerrar sesión</a>
-      <p>Usuario: {{usuario}}</p>
-      {% endif %}
-    </div>
-        
-        </ul>
-        
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contacto">Equipos</a>
+        </li>
+
+        <div class="sesion">
+          {% if usuario=="" %}
+          <li class="nav-item">
+            <a class="nav-link" href="/contacto">Iniciar sesión</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/gestion">Gestión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/log-out">Cerrar sesión</a>
+          </li>
+          <li class="nav-item">
+            <p>Usuario: {{usuario}}</p>
+          </li>
+
+          {% endif %}
+        </div>
+
+      </ul>
+
     </div>
   </nav>
   <center>
@@ -59,53 +70,53 @@
 
   {% for jornada, dias in evFuturos.items() %}
   <center>
-      <h3>{{ jornada }}</h3>
+    <h3>{{ jornada }}</h3>
   </center>
   {% for dia, partidos in dias.items() %}
-      <center>
-          <h4>{{ dia }}</h4>
-      </center>
-      {% for partido in partidos %}
-      <div class="resultados">
-      <!-- partido -->
-          <div class="partido">
-              <img src="{{partido.eq2}}.png" height="60px" width="50px"><br>
-              <strong>{{partido.eq1}}</strong>
-          </div>
-          <div class="goles1">Por disputar</div>
-          <div class="VS">
-              <h3>VS</h3>
-          </div>
-          <div class="goles2">Por disputar</div>
-          <div class="partido">
-              <img src="{{partido.eq2}}.png" height="60px" width="50px"><br>
-              <strong>{{partido.eq2}}</strong>
-          </div>
-      </div>
-      {% endfor %}
-  {% endfor %}
-</div>
-<br><br>
-{% endfor %}
-
-<div class="footer">
   <center>
-      <div class="grid-itemFooter">
-          <h4>Copyright</h4>
-          <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
-      </div>
+    <h4>{{ dia }}</h4>
   </center>
-  <center>
-    <div class="grid-itemFooter">
-      <h4>Redes sociales</h4>
-      <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.png"></a>
-      <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
-      <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
-      <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.png"></a>
-
+  {% for partido in partidos %}
+  <div class="resultados">
+    <!-- partido -->
+    <div class="partido">
+      <img src="{{partido.eq2}}.png" height="60px" width="50px"><br>
+      <strong>{{partido.eq1}}</strong>
+    </div>
+    <div class="goles1">Por disputar</div>
+    <div class="VS">
+      <h3>VS</h3>
+    </div>
+    <div class="goles2">Por disputar</div>
+    <div class="partido">
+      <img src="{{partido.eq2}}.png" height="60px" width="50px"><br>
+      <strong>{{partido.eq2}}</strong>
+    </div>
   </div>
-  </center>
-</div>
+  {% endfor %}
+  {% endfor %}
+  </div>
+  <br><br>
+  {% endfor %}
+
+  <div class="footer">
+    <center>
+      <div class="grid-itemFooter">
+        <h4>Copyright</h4>
+        <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
+      </div>
+    </center>
+    <center>
+      <div class="grid-itemFooter">
+        <h4>Redes sociales</h4>
+        <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.png"></a>
+        <a href="https://x.com/laliga"><img src="logos/logoTwitter.png"></a>
+        <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.png"></a>
+        <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.png"></a>
+
+      </div>
+    </center>
+  </div>
 
 </body>
 <style>
@@ -132,18 +143,11 @@
 
   .sesion a{
     float: right;
-    color: white;
     text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
-    font-size: 15px;
   }
 
   .menu a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  .sesion a:hover {
     background-color: #ddd;
     color: black;
   }
@@ -176,10 +180,15 @@
   }
 
   .footer {
-    display: grid;
-    grid-template-columns: auto auto;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
     margin-top: 30px;
     margin-bottom: 30px;
+    justify-content: center;
+    position: relative;
+
+    bottom: 0%;
   }
 
   .grid-itemFooter img {
@@ -209,7 +218,6 @@
 
   }
 </style>
-<script
-src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>

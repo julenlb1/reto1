@@ -10,44 +10,56 @@
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link active" href="/">Inicio</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/noticias">Noticias</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/calendario">Calendario</a>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/noticias">Noticias</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendario">Calendario</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/equipos">Equipos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/contacto">Equipos</a>
-    </li>
-    <div class="sesion">
-      {% if usuario=="" %}
-      <a href="/contacto">Iniciar sesión</a>
-      {% else %}
-      <a href="/gestion">Gestión</a>
-      <a href="/log-out">Cerrar sesión</a>
-      <p>Usuario: {{usuario}}</p>
-      {% endif %}
-    </div>
-        
-        </ul>
-        
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contacto">Equipos</a>
+        </li>
+
+        <div class="sesion">
+          {% if usuario=="" %}
+          <li class="nav-item">
+            <a class="nav-link" href="/contacto">Iniciar sesión</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/gestion">Gestión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/log-out">Cerrar sesión</a>
+          </li>
+          <li class="nav-item">
+            <p>Usuario: {{usuario}}</p>
+          </li>
+
+          {% endif %}
+        </div>
+
+      </ul>
+
     </div>
   </nav>
     
@@ -187,18 +199,11 @@
 
   .sesion a{
     float: right;
-    color: white;
     text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
-    font-size: 15px;
   }
 
   .menu a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  .sesion a:hover {
     background-color: #ddd;
     color: black;
   }
@@ -219,12 +224,17 @@
       text-align: justify;
     }
 
-    .footer{
-      display: grid;
-      grid-template-columns: auto auto;
-      margin-top: 30px;
-      margin-bottom: 30px;
-    }
+    .footer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    position: relative;
+
+    bottom: 0;
+  }
 
     .grid-itemFooter img{
       height: 30px;
