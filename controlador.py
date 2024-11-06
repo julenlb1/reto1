@@ -10,7 +10,7 @@ from modelos import escribeRes
 usuario = ""
 hayUser = False
 idUsuario = None
-
+global sesion
 def leerResTerminados(environ, start_response): # Función para hacer una query de la base de datos a la tabla de resultados terminados
                                                 # y plasmar esos datos en el html mediante jinja
     sesion = modelos.abrir_sesion() # Abro la sesión de queries
@@ -115,25 +115,36 @@ def ponerComentarioRes(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def crearUsuario(environ, start_response, sesion):
+def crearUsuario(environ, start_response):
     if environ['REQUEST_METHOD'] == 'POST':
-        size = int(environ.get('CONTENT_LENGTH', 0))
-        data = environ['wsgi.input'].read(size).decode()
-        paramsUsuario = parse_qs(data)
-        if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "" or paramsUsuario['password-2'] == "":
-            return None
-        else:
-            sesion = modelos.abrir_sesion()
-            cUsuario = modelos.Usuarios(
-            nombre=paramsUsuario['nombre'],
-            email=paramsUsuario['email'],
-            passwd=paramsUsuario['password']
-            )
-            cUsuario.create(sesion)
-            modelos.cerrar_sesion(sesion)
-            sesion = None
-            start_response('303 See Other', [('Location', '/contacto')])
-            return None
+        try:
+            size = int(environ.get('CONTENT_LENGTH', 0))
+            data = environ['wsgi.input'].read(size).decode()
+            paramsUsuario = parse_qs(data)
+            usuario = paramsUsuario.get('nombre', [None])[0]
+            email = paramsUsuario.get('email', [None])[0]
+            contrasena = paramsUsuario.get('password', [None])[0]
+            contrasena2 = paramsUsuario.get('password-2', [None])[0]
+            
+            if usuario == None or email == None or contrasena == None or contrasena2 == None:
+                return None
+            else:
+                sesion = modelos.abrir_sesion()
+                cUsuario = modelos.Usuarios(
+                nombre=usuario,
+                email=email,
+                passwd=contrasena
+                )
+                print("prueba")
+                cUsuario.create(sesion)
+                print("prueba")
+                modelos.cerrar_sesion(sesion)
+                sesion = None
+                start_response('303 See Other', [('Location', '/contacto')])
+                return None
+        except Exception as e:
+            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
+            return [str(e).encode('utf-8')]
     else:
         return vistas.handle_404(environ, start_response)
 
@@ -209,7 +220,7 @@ def app(environ, start_response):
     elif path.startswith('/static/'):
         return vistas.serve_static(environ, start_response)
     elif path == '/sign-up':
-        return crearUsuario(environ, start_response, sesion)
+        return crearUsuario(environ, start_response)
     elif path == '/log-in':
         usuario, UserSesion, hayUser, idUsuario = iniciar_sesion(environ, start_response)
         return vistas.sesion_init(start_response, hayUser)
