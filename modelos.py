@@ -114,7 +114,7 @@ class evFuturos(Base, miCRUD):
     matchday = Column(String)
     mipartido = Column(String)
 # Crear la tabla en la base de datos (esto solo se hace una vez)"""
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 # Ejemplos de uso:
 

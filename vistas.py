@@ -97,14 +97,6 @@ def no_user_handle(environ, start_response):
     start_response('303 See Other', [('Location', '/')])
     return [b'Usuario no encontrado, redireccionando...']
 
-def ComentarioRes(environ, start_response, comentarioRes):
-    # Lógica para la ruta '/comment-index'
-    response = template.render(comentarioRes=comentarioRes).encode('utf-8')
-    status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
-    start_response(status, response_headers)
-    return [response]
-
 
 def handle_404(environ, start_response):
     # Lógica para manejar una ruta no reconocida (404)

@@ -115,30 +115,25 @@ def ponerComentarioRes(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def crearUsuario(environ, start_response):
+def crearUsuario(environ, start_response, sesion):
     if environ['REQUEST_METHOD'] == 'POST':
-        try:
-            size = int(environ.get('CONTENT_LENGTH', 0))
-            data = environ['wsgi.input'].read(size).decode()
-            paramsUsuario = parse_qs(data)
-            sesion = modelos.abrir_sesion()    
-            if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "" or paramsUsuario['password-2'] == "":
-                return None
-            else:
-                sesion = modelos.abrir_sesion()
-                cUsuario = modelos.Usuarios(
-                nombre=paramsUsuario['nombre'],
-                email=paramsUsuario['email'],
-                passwd=paramsUsuario['password']
-                )
-                cUsuario.create(sesion)
-                modelos.cerrar_sesion(sesion)
-                sesion = None
-                start_response('303 See Other', [('Location', '/contacto')])
-                return None
-        except Exception as e:
-            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
-            return [str(e).encode('utf-8')]
+        size = int(environ.get('CONTENT_LENGTH', 0))
+        data = environ['wsgi.input'].read(size).decode()
+        paramsUsuario = parse_qs(data)
+        if paramsUsuario['nombre'] == "" or paramsUsuario['email'] == "" or paramsUsuario['password'] == "" or paramsUsuario['password-2'] == "":
+            return None
+        else:
+            sesion = modelos.abrir_sesion()
+            cUsuario = modelos.Usuarios(
+            nombre=paramsUsuario['nombre'],
+            email=paramsUsuario['email'],
+            passwd=paramsUsuario['password']
+            )
+            cUsuario.create(sesion)
+            modelos.cerrar_sesion(sesion)
+            sesion = None
+            start_response('303 See Other', [('Location', '/contacto')])
+            return None
     else:
         return vistas.handle_404(environ, start_response)
 
@@ -214,7 +209,7 @@ def app(environ, start_response):
     elif path.startswith('/static/'):
         return vistas.serve_static(environ, start_response)
     elif path == '/sign-up':
-        return crearUsuario(environ, start_response)
+        return crearUsuario(environ, start_response, sesion)
     elif path == '/log-in':
         usuario, UserSesion, hayUser, idUsuario = iniciar_sesion(environ, start_response)
         return vistas.sesion_init(start_response, hayUser)
