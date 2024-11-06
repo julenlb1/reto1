@@ -59,49 +59,22 @@ def leerComIndex(environ, start_response):  # Función para hacer una query de l
     sesion = None
     return comentarios
 
-def ponerComentarioNot(environ, start_response):
-    if environ['REQUEST_METHOD'] == 'POST':
-        try:
-            size = int(environ.get('CONTENT_LENGTH', 0))
-            data = environ['wsgi.input'].read(size).decode()
-            paramsComentario = parse_qs(data)      
-            
-            if params['nombre'][0] == "" or params['email'][0] == "" or params['password'][0] == "" or params['password-2'][0] == "":
-                return["hola"]
-            else:
-                sesion = modelos.abrir_sesion()
-                escribeNot = modelos.escribeNot(
-                idNot=idNoticia,
-                idUsuario=idUsuario,
-                usuario=usuario,
-                comentario=paramsComentario['comentario'][0],
-                likes=0
-                )
-                escribeNot.create(sesion)
-                modelos.cerrar_sesion(sesion)
-                sesion = None
-                start_response('303 See Other', [('Location', '/es')])
-                return [b'']
-        except Exception as e:
-            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
-            return [str(e).encode('utf-8')]
-    else:
-        return vistas.handle_404(environ, start_response)
-
 def ponerComentarioRes(environ, start_response):
     if environ['REQUEST_METHOD'] == 'POST':
         try:
             size = int(environ.get('CONTENT_LENGTH', 0))
             data = environ['wsgi.input'].read(size).decode()
-            paramsComentario = parse_qs(data)      
-            sesion = modelos.abrir_sesion()
+            paramsComentario = parse_qs(data)
+            comentario = paramsComentario.get('comentario', [None])[0] 
+            
             if not usuario:
                 return["<script>alert('No has iniciado sesion (aunque no se como has enviado el comentario)')</script>"]
             else:
+                sesion = modelos.abrir_sesion()
                 escribeRes = modelos.escribeRes(
-                idUsuario=idUsuario,
+                idusuario=idUsuario,
                 usuario=usuario,
-                comentario=paramsComentario['comentario'],
+                comentario=comentario,
                 likes=0
                 )
                 escribeRes.create(sesion)
@@ -127,7 +100,8 @@ def crearUsuario(environ, start_response):
             contrasena2 = paramsUsuario.get('password-2', [None])[0]
             
             if usuario == None or email == None or contrasena == None or contrasena2 == None:
-                return None
+                start_response('303 See Other', [('Location', '/contacto')])
+                return [b"<script>alert('Todos los campos deben estar completos')</script>"]
             else:
                 sesion = modelos.abrir_sesion()
                 cUsuario = modelos.Usuarios(
@@ -135,13 +109,16 @@ def crearUsuario(environ, start_response):
                 email=email,
                 passwd=contrasena
                 )
-                print("prueba")
+                
                 cUsuario.create(sesion)
-                print("prueba")
+                
                 modelos.cerrar_sesion(sesion)
+                
                 sesion = None
+                print("prueba")
                 start_response('303 See Other', [('Location', '/contacto')])
-                return None
+                print("prueba")
+                return [b"<script>alert('Cuenta creada correctamente')</script>"]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]
@@ -182,17 +159,22 @@ def insertarPartido(environ, start_response):
             size = int(environ.get('CONTENT_LENGTH', 0))
             data = environ['wsgi.input'].read(size).decode()
             paramsPartido = parse_qs(data)      
-            
-            if paramsPartido['eq1'] == "" or paramsPartido['eq2'] == "" or paramsPartido['dia'] == "" or paramsPartido['hora'][0] == "":
-                return[b""]
+            eq1 = paramsPartido.get('eq1', [None])[0]
+            eq1 = paramsPartido.get('eq2', [None])[0]
+            dia = paramsPartido.get('fecha', [None])[0]
+            hora = paramsPartido.get('horainicio', [None])[0]
+            matchday = paramsPartido.get('matchday', [None])[0]
+            if eq1 == None or eq2 == None or dia == None or hora == None or matchday == None:
+                start_response('303 See Other', [('Location', '/gestion')])
+                return[b"Inserta todos los datos necesarios"]
             else:
                 sesion = modelos.abrir_sesion()
                 crearPartido = modelos.evFuturos(
-                eq1=paramsPartido['eq1'],
-                eq2=paramsPartido['eq2'],
-                hora=paramsPartido['horainicio'],
-                dia=paramsPartido['fecha'],
-                matchday=paramsPartido['matchday'],
+                eq1=eq1,
+                eq2=eq2,
+                hora=hora,
+                dia=dia,
+                matchday=matchday,
                 mipartido="true"
                 )
                 sesion.add(crearPartido)
@@ -200,7 +182,7 @@ def insertarPartido(environ, start_response):
                 modelos.cerrar_sesion(sesion)
                 sesion = None
                 start_response('303 See Other', [('Location', '/gestion')])
-                return [b""]
+                return [b"Partido insertado correctamente"]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
             return [str(e).encode('utf-8')]

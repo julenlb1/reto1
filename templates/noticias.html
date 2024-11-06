@@ -106,22 +106,6 @@
         <div><center> <img src="anuncios/anuncio6.gif"  height="400px" width="150px"></center></div>
         
       </div>
-
-      <div class="seccionComentarios">
-        <h4>Déjanos tu opinión:</h4>
-        <form id="comentarioFormulario">
-            <textarea name="texto" rows="4" cols="40" placeholder="Escribe tu comentario" required></textarea><br>
-            {% if not usuario == "" %}
-            <input type="submit" value="Enviar" class="enviar">
-            <input type="reset" value="Borrar" class="borrar">
-            {% else %}
-            <h5 style="color: rgb(255, 66, 66);"><a href="/contacto">Inicia sesión</a> para comentar</h5>
-            {% endif %}
-        </form>
-        <div class="listaComentarios" id="listaComentarios">
-            <h4>Comentarios:</h4>
-        </div>
-    </div>
     
     <script>
         document.getElementById('comentarioFormulario').addEventListener('submit', function(event) {

@@ -68,13 +68,6 @@ class Usuarios(Base, miCRUD):
     email = Column(String)
     passwd = Column(String)
 
-class Noticias(Base):
-    __tablename__ = 'noticias'
-    id = Column(Integer, primary_key=True)
-    nombrenot = Column(String)
-    cuerponot = Column(String)
-    Likes = Column(Integer)
-
 class ResTerminados(Base, miCRUD):
     __tablename__ = 'resterminados'
     id = Column(Integer, primary_key=True)
@@ -86,16 +79,8 @@ class ResTerminados(Base, miCRUD):
     dia = Column(Date)
     matchday = Column(String)
     mipartido = Column(String)
-class escribeNot(Base):
-    __tablename__ = 'escribenot'
-    id = Column(Integer, primary_key=True)
-    idusuario = Column(Integer, ForeignKey('usuarios.id'))
-    usuario = relationship('Usuarios', backref='escribeNot')
-    nombreusuario = Column(String)
-    comentario = Column(String)
-    likes = Column(Integer)
 
-class escribeRes(Base):
+class escribeRes(Base, miCRUD):
     __tablename__ = 'escriberes'
     id = Column(Integer, primary_key=True)
     idusuario = Column(Integer, ForeignKey('usuarios.id'))
