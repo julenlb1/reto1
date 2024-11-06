@@ -19,9 +19,14 @@
     <a href="/equipos">Equipos</a>
     <a href="/contacto">Contacto</a>
     <div class="sesion">
+      
+      {% if usuario=="" %}
+        <a href="/contacto">Iniciar sesión</a>
+      {% else %}
       <a href="/gestion">Gestión</a>
-      <a href="/contacto">Iniciar sesión</a>
-      <a href="/log-out">Cerrar sesión</a>
+        <a href="/log-out">Cerrar sesión</a>
+        <p>Usuario: {{usuario}}</p>
+      {% endif %} 
       
     </div>
   </div>
@@ -36,7 +41,7 @@
   </center>
   {% for dia, partidos in dias.items() %}
       <center>
-          <h4>{{dia}}</h4>
+          <h4>{{ dia }}</h4>
       </center>
       {% for partido in partidos %}
       <div class="resultados">
