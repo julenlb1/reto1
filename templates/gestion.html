@@ -4,28 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de resultados</title>
-    <link rel="shortcut icon" href="logos/logoPagina.webp" alt="logo"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
 </head>
 <body>
-  <div class="menu">
-    <a href="/">Inicio</a>
-    <a href="/noticias">Noticias</a>
-    <a href="/partidosfinalizados">Partidos finalizados</a>
-    <a href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-    <a href="/calendario">Calendario</a>
-    <a href="/equipos">Equipos</a>
-    <a href="/contacto">Contacto</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/noticias">Noticias</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/calendario">Calendario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/equipos">Equipos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contacto">Equipos</a>
+    </li>
     <div class="sesion">
       {% if usuario=="" %}
-        <a href="/contacto">Iniciar sesión</a>
+      <a href="/contacto">Iniciar sesión</a>
       {% else %}
-        <a href="/log-out">Cerrar sesión</a>
-        <p>Usuario: {{usuario}}</p>
-      {% endif %} 
-      
-      
+      <a href="/gestion">Gestión</a>
+      <a href="/log-out">Cerrar sesión</a>
+      <p>Usuario: {{usuario}}</p>
+      {% endif %}
     </div>
-  </div>
+        
+        </ul>
+        
+    </div>
+  </nav>
       <center><h1>Gestionar los resultados</h1></center>
       
      
@@ -144,11 +168,13 @@
 
   @media (min-width:200px) {
     .formulario {
-    display: grid;
+    display: flex;
     flex-direction: column;
     flex-basis: 100%;
     place-items: center;
     margin-top: 60px;
+    padding-left: 80px;
+    
   }
   }
   @media (min-width:1280px) {
@@ -165,6 +191,7 @@
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+   
   }
 
   .formulario > h2 {
@@ -176,27 +203,49 @@
   .formulario > .partidoFuturo {
     margin-left: auto;
     margin-right: auto;
+    
   }
 
   
   .footer {
-    display: flex;
-    justify-content: space-between;  
-    align-items: center;  
-    flex-wrap: wrap;  
-    padding: 60px; 
-}
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 30px;
+      margin-bottom: 30px;
+      padding: 10px;
+    }
 
-  .grid-itemFooter img {
-    height: 30px;
-    width: 30px;
-    border-radius: 26%;
-    justify-content: center;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+    .grid-itemFooter img {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      margin: 10px;
+      display: inline-block;
+    }
 
+    @media (max-width: 768px) {
+      .formulario {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .grid-itemFooter {
+        margin: 10px 0;
+      }
+
+      .partidoFuturo,
+      .partidoJugado {
+        width: 100%;
+      }
+    }
   
 </style>
-
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
 </html>
