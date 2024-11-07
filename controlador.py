@@ -12,6 +12,11 @@ usuario = ""
 hayUser = False
 idUsuario = None
 global sesion
+global buscado
+global partidoBuscado
+partidoBuscado = ""
+buscado = False
+
 def leerResTerminados(environ, start_response): # Función para hacer una query de la base de datos a la tabla de resultados terminados
                                                 # y plasmar esos datos en el html mediante jinja
     sesion = modelos.abrir_sesion() # Abro la sesión de queries
@@ -59,6 +64,39 @@ def leerComIndex(environ, start_response):  # Función para hacer una query de l
     modelos.cerrar_sesion(sesion)
     sesion = None
     return comentarios
+
+def buscarPartido(environ, start_response):
+    
+    global usuario
+    global buscado
+    global partidoBuscado
+    if environ['REQUEST_METHOD'] == 'POST':
+        try:
+            size = int(environ.get('CONTENT_LENGTH', 0))
+            data = environ['wsgi.input'].read(size).decode()
+            paramsBuscar = parse_qs(data)
+            eq1 = paramsBuscar.get('eq1', [None])[0]
+            eq2 = paramsBuscar.get('eq2', [None])[0]  
+            dia = paramsBuscar.get('fecha_update', [None])[0] 
+            
+            if not usuario:
+                return[b"<script type=text/javascript>alert('No has iniciado sesion')</script>"]
+            else:
+
+                resterminados = modelos.ResTerminados()
+                consulta = {"eq1":eq1, "eq2":eq2, "dia":dia}
+                print("partidoBuscado")
+                partidoBuscado = resterminados.readAlgunos(UserSesion, **consulta)
+                buscado = True
+                
+                start_response('303 See Other', [('Location', '/gestion')])
+                print("partidoBuscado")
+                return [b"Partido encontrado"]
+        except Exception as e:
+            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
+            return [str(e).encode('utf-8')]
+    else:
+        return vistas.handle_404(environ, start_response)
 
 def ponerComentarioRes(environ, start_response):
     global usuario
@@ -234,6 +272,79 @@ def insertarPartido(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
+def actualizarPartido(environ, start_response):
+    if environ['REQUEST_METHOD'] == 'POST':
+        try:
+            size = int(environ.get('CONTENT_LENGTH', 0))
+            data = environ['wsgi.input'].read(size).decode()
+            paramsUpdate = parse_qs(data)      
+            idUpdate = paramsUpdate.get('id', [None])[0]
+            eq1 = paramsUpdate.get('eq1_update', [None])[0]
+            eq2 = paramsUpdate.get('eq2_update', [None])[0]
+            reseq1 = paramsUpdate.get('resultado_eq1', [None])[0]
+            reseq2 = paramsUpdate.get('resultado_eq2', [None])[0]
+            hora = paramsUpdate.get('hora_update', [None])[0]
+            dia = paramsUpdate.get('fecha_update2', [None])[0]
+            matchday = paramsUpdate.get('matchday', [None])[0]
+            if eq1 == None or eq2 == None or dia == None or hora == None or matchday == None or reseq1 == None or reseq2 == None:
+                print(f"eq1:{eq1}; eq2:{eq2}; dia:{dia}; hora:{hora}; matchday:{matchday}; reseq1:{reseq1} reseq2:{reseq2}")
+                start_response('200 OK', [('Content-type', 'text/html')])
+                html_response = """
+                <html>
+                <head>
+                    <title>Error</title>
+                </head>
+                <body>
+                    <h2>Inserta todos los datos necesarios</h2>
+                    <p>Seras redirigido a la pagina de gestión en 3 segundos...</p>
+                    <script type="text/javascript">
+                        setTimeout(function() {
+                            window.location.href = '/';
+                        }, 3000);
+                    </script>
+                </body>
+                </html>
+                """
+                return [html_response.encode('utf-8')]
+            else:
+                sesion = modelos.abrir_sesion()
+                crearPartido = modelos.ResTerminados(
+                eq1=eq1,
+                eq2=eq2,
+                reseq1=reseq1,
+                reseq2=reseq2,
+                horainicio=hora,
+                dia=dia,
+                matchday=matchday,
+                mipartido="true"
+                )
+                sesion.commit()
+                modelos.cerrar_sesion(sesion)
+                sesion = None
+                start_response('200 OK', [('Content-type', 'text/html')])
+                html_response = """
+                <html>
+                <head>
+                    <title>Error</title>
+                </head>
+                <body>
+                    <h2>Partido actualizado correctamente</h2>
+                    <p>Seras redirigido a la pagina de gestión en 3 segundos...</p>
+                    <script type="text/javascript">
+                        setTimeout(function() {
+                            window.location.href = '/gestion';
+                        }, 3000);
+                    </script>
+                </body>
+                </html>
+                """
+                return [html_response.encode('utf-8')]
+        except Exception as e:
+            start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
+            return [str(e).encode('utf-8')]
+    else:
+        return vistas.handle_404(environ, start_response)
+
 
 
 def app(environ, start_response):
@@ -260,6 +371,10 @@ def app(environ, start_response):
         return vistas.sesion_finish(environ, start_response)
     elif path == '/insert-game':
         return insertarPartido(environ, start_response)
+    elif path == '/search-game':
+        return buscarPartido(environ, start_response)
+    elif path == '/update-game':
+        return actualizarPartido(environ, start_response)
     elif path == '/comentario-index':
         return ponerComentarioRes(environ, start_response)
     elif path == '/calendario':
@@ -276,7 +391,9 @@ def app(environ, start_response):
     elif path == '/noticias':
         return vistas.noticias(environ, start_response, usuario)
     elif path == '/gestion':
-        return vistas.gestion(environ, start_response, usuario)
+        if buscado == False:
+            partidoBuscado == ""
+        return vistas.gestion(environ, start_response, usuario, partidoBuscado, buscado)
     else:
         return vistas.handle_404(environ, start_response)
 

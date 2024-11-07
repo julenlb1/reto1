@@ -68,9 +68,9 @@ def paginaResultados(environ, start_response, resTerminados, usuario):
     start_response(status, response_headers)
     return [response]
 
-def gestion(environ, start_response, usuario):
+def gestion(environ, start_response, usuario, partidos, buscado):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
-    response = templateGestion.render(usuario=usuario).encode('utf-8')
+    response = templateGestion.render(usuario=usuario, partidos=partidos, buscado=buscado).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
