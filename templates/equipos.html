@@ -259,13 +259,9 @@
 
     .grid-container {
         display: grid;
-        
         grid-template-columns: auto auto;
-        padding-left: 200px;
-        padding-right: 200px;
-        padding-top: 30px;
-        column-gap: 5%;
-        row-gap: 5%;
+        padding-left: 20%;
+        padding-right: 20%;
         background-color: black;
     }
 
@@ -288,14 +284,12 @@
 
 
     .footer {
-        display: flex;
+        display: grid;
         width: 100%;
-        flex-direction: row;
-        margin-top: 30px;
-        margin-bottom: 30px;
+        grid-template-columns: auto auto;
         justify-content: center;
-        position: relative;
-        bottom: 0%;
+        position: absolute;
+        
     }
 
     .grid-itemFooter img {
@@ -323,6 +317,26 @@
         text-align: center;
         margin-top: 10px;
     }
+
+    @media (max-width:450px) {
+
+    .grid-container {
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    width: 30%;
+    margin-left: 30%;
+  }
+
+  h1{
+    font-size: 10px;
+  }
+
+  .footer{
+    display: flex;
+    flex-direction: column;
+  }
+  }
 
     .circle {
         content: " ";
