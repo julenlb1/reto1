@@ -7,7 +7,7 @@ from modelos import enVivo
 from modelos import evFuturos
 from modelos import escribeRes
 import os
-
+global usuario
 usuario = ""
 hayUser = False
 idUsuario = None
@@ -116,8 +116,11 @@ def ponerComentarioRes(environ, start_response):
                 usuario=usuario,
                 comentario=comentario,
                 )
+                print("hola")
                 escribeRes.create(UserSesion)
+                print("hola")
                 start_response('303 See Other', [('Location', '/')])
+                
                 return [b'']
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
@@ -203,8 +206,8 @@ def iniciar_sesion(environ, start_response):
         usuarios = modelos.Usuarios.readAlgunos(UserSesion, **consulta)
         if usuarios:
             hayUser = True
-            for usuario in usuarios:
-                idUsuario = usuario.id
+            for usuario1 in usuarios:
+                idUsuario = usuario1.id
             
             return usuario, UserSesion, hayUser, idUsuario
         else:
@@ -394,6 +397,10 @@ def app(environ, start_response):
         if buscado == False:
             partidoBuscado == ""
         return vistas.gestion(environ, start_response, usuario, partidoBuscado, buscado)
+    elif path == '/robots':
+        return vistas.robots(environ, start_response)
+    elif path == '/sitemap':
+        return vistas.robots(environ, start_response)
     else:
         return vistas.handle_404(environ, start_response)
 
