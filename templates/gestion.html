@@ -89,14 +89,37 @@
             <label for="fecha_update">Fecha:</label>
             <input type="text" id="fecha_update" name="fecha_update" placeholder="aaaa-mm-dd" required><br>
     
-            <label for="resultado_eq1">Resultado Equipo 1:</label>
-            <input type="number" id="resultado_eq1" name="resultado_eq1" required><br>
-    
-            <label for="resultado_eq2">Resultado Equipo 2:</label>
-            <input type="number" id="resultado_eq2" name="resultado_eq2" required><br>
-    
-            <input type="submit" value="Actualizar Resultados">
+            <input type="submit" value="Buscar Resultados">
         </form>
+
+        {% for partido in partidos %}
+        <form method="post">
+          <input type="hidden" name="action" value="update">
+
+          <label for="eq1_update">Equipo 1: {{partido.eq1}}</label>
+          <input type="text" id="eq1_update" name="eq1" required><br>
+  
+          <label for="eq2_update">Equipo 2: {{partido.eq2}}</label>
+          <input type="text" id="eq2_update" name="eq2" required><br>
+  
+          <label for="resultado_eq1">Resultado Equipo 1: {{partido.reseq1}}</label>
+          <input type="number" id="resultado_eq1" name="resultado_eq1" required><br>
+  
+          <label for="resultado_eq2">Resultado Equipo 2: {{partido.reseq1}}</label>
+          <input type="number" id="resultado_eq2" name="resultado_eq2" required><br>
+
+          <label for="fecha_update">Fecha:{{partido.dia}}</label>
+          <input type="text" id="fecha_update" name="fecha_update" placeholder="aaaa-mm-dd" required><br>
+          
+          <label for="fecha_update">Fecha:{{partido.horainicio}}</label>
+          <input type="text" id="fecha_update" name="fecha_update" placeholder="aaaa-mm-dd" required><br>
+
+          <label for="fecha_update">Fecha:{{partido.matchday}}</label>
+          <input type="text" id="fecha_update" name="fecha_update" placeholder="aaaa-mm-dd" required><br>
+  
+          <input type="submit" value="Actualizar Resultado">
+      </form>
+      {% endfor %}
         </div>
       </div>
     <br><br><br><br>

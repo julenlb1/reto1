@@ -54,12 +54,15 @@
   <center>
     <h1>El Rincón del Fútbol</h1>
   </center>
-  <p>Bienvenido a El Rincón del Fútbol, donde puedes consultar resultados deportivos de La Liga española, además de
-    poder ver un resumen de los partidos en directo y saber que partidos vienen en futuras jornadas, todo esto
-    pudiéndolo comentar con otros fútbol fans</p>
+  <p>Bienvenido a El Rincón del Fútbol, una pagina web creada por unos fans de la liga española 
+    donde puedes consultar resultados deportivos de la misma, tendras la posibilidad de ver los 
+    resultados de los partidos ya finalizados, partidos por disputar y mas importante, podras seguir
+    los partidos en directo minuto a minuto. Nuestra pagina tambien contiene un apartado donde podras
+    leer las noticias relacionadas con todos los equipos de la liga y por ultimo otro apartado donde
+    podras ver todos los equipos participantes de La Liga EA Sports.</p>
 
     <div class="seccionComentarios">
-      <h4>Déjanos tu opinión:</h4>
+      <h4>Comenta:</h4>
       <form id="comentarioFormulario" method="post" action="/comentario-index">
           <textarea name="texto" rows="4" cols="40" placeholder="Escribe tu comentario" id="comentario" required></textarea><br>
           {% if not usuario == "" %}
