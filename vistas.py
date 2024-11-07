@@ -10,6 +10,7 @@ templateEquipos = env.get_template('equipos.html')
 templateNoticias = env.get_template('noticias.html')
 templateResultados = env.get_template('partidosfinalizados.html')
 templateGestion = env.get_template('gestion.html')
+templateRobots = env.get_template('robots.txt')
 
 # Funciones para manejar las rutas específicas
 def indice(environ, start_response, usuario, comentarioRes):
@@ -68,9 +69,9 @@ def paginaResultados(environ, start_response, resTerminados, usuario):
     start_response(status, response_headers)
     return [response]
 
-def gestion(environ, start_response, usuario):
+def gestion(environ, start_response, usuario, partidos, buscado):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
-    response = templateGestion.render(usuario=usuario).encode('utf-8')
+    response = templateGestion.render(usuario=usuario, partidos=partidos, buscado=buscado).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html')]
     start_response(status, response_headers)
@@ -93,6 +94,13 @@ def no_user_handle(environ, start_response):
     start_response('303 See Other', [('Location', '/')])
     return [b'Usuario no encontrado, redireccionando...']
 
+def robots(environ, start_response):
+    # Lógica para la ruta '/templates/partidosfinalizados.html'
+    response = templateRobots.render().encode('utf-8')
+    status = '200 OK'
+    response_headers = [('Content-type', 'text')]
+    start_response(status, response_headers)
+    return [response]
 
 def handle_404(environ, start_response):
     # Lógica para manejar una ruta no reconocida (404)
