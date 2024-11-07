@@ -5,51 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equipos de nuestra división</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  rel="shortcut icon" href="logos/logoPagina.webp" alt="logo" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        rel="shortcut icon" href="logos/logoPagina.webp" alt="logo">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/noticias">Noticias</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/calendario">Calendario</a>
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Inicio</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/noticias">Noticias</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/partidosfinalizados">Partidos finalizados</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/envivo">Partidos en directo<i class="circle Blink"></i>&nbsp;</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/calendario">Calendario</a>
+            </li>
+            <li class="nav-item active">
               <a class="nav-link" href="/equipos">Equipos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contacto">Equipos</a>
-        </li>
-        <div class="sesion">
-          {% if usuario=="" %}
-          <a href="/contacto">Iniciar sesión</a>
-          {% else %}
-          <a href="/gestion">Gestión</a>
-          <a href="/log-out">Cerrar sesión</a>
-          <p>Usuario: {{usuario}}</p>
-          {% endif %}
-        </div>
-            
-            </ul>
-            
+            </li>
+            {% if usuario=="" %}
+            <li class="nav-item">
+              <a class="nav-link" href="/contacto">Iniciar sesión/crear cuenta</a>
+            </li>
+    
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion">Gestión</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/log-out">Cerrar sesión</a>
+            </li>
+            <li class="nav-item">
+              <p>Usuario: {{ usuario }}</p>
+            </li>
+    
+            {% endif %}
+    
+          </ul>
+    
         </div>
       </nav>
     <center>
@@ -57,105 +62,120 @@
     </center>
     <div class="grid-container">
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/athletic.webp" alt="athletic"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/AthleticClub.png"
+                    alt="athletic"></div>
             <figcaption>
                 <div id="equipo1">Athletic club de Bilbao</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="185" height="145" src="equipos/atletico.webp" alt="atletico"></div>
+            <div class="grid-item"><img width="120" height="130"
+                    src="/static/equipos/ClubAtléticodeMadrid.png" alt="atletico"></div>
             <figcaption>
                 <div id="equipo2">Club Atlético de Madrid</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/osasuna.webp" alt="osasuna"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/CAOsasuna.png" alt="osasuna">
+            </div>
             <figcaption>
                 <div id="equipo3">Club Atlético Osasuna</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="130" src="equipos/leganes.webp" alt="leganes"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/CDLeganés.png" alt="leganes">
+            </div>
             <figcaption>
                 <div id="equipo4">Club Deportivo Leganés</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/alaves.webp" alt="alaves"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/DeportivoAlavés.png"
+                    alt="alaves"></div>
             <figcaption>
                 <div id="equipo5">Deportivo Alavés</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/barca.webp" alt="barca"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/FCBarcelona.png" alt="barca">
+            </div>
             <figcaption>
                 <div id="equipo6">Fútbol Club Barcelona</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/getafe.webp" alt="getafe"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/GetafeCF.png" alt="getafe">
+            </div>
             <figcaption>
                 <div id="equipo7">Getafe Club de Fútbol</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="155" src="equipos/girona.webp" alt="girona"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/GironaFC.png" alt="girona">
+            </div>
             <figcaption>
                 <div id="equipo8">Girona Fútbol Club</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/rayo.webp" alt="rayo"></div>
+            <div class="grid-item"><img width="120" height="130"
+                    src="/static/equipos/RayoVallecanodeMadrid.png" alt="rayo"></div>
             <figcaption>
                 <div id="equipo9">Rayo Vallecano de Madrid</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="100" height="155" src="equipos/celta.webp" alt="celta"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/RCCeltadeVigo.png"
+                    alt="celta"></div>
             <figcaption>
                 <div id="equipo10">Real Club Celta de Vigo</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/espanyol.webp" alt="espanyol"></div>
+            <div class="grid-item"><img width="120" height="130"
+                    src="/static/equipos/RCDEspanyoldeBarcelona.png" alt="espanyol"></div>
             <figcaption>
                 <div id="equipo11">RCD Espanyol de Barcelona</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/mallorca.webp" alt="mallorca"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/RCDMallorca.png"
+                    alt="mallorca"></div>
             <figcaption>
                 <div id="equipo12">Real Club Deportivo Mallorca</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="130" height="135" src="equipos/betis.webp" alt="betis"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/RealBetisBalompié.png"
+                    alt="betis"></div>
             <figcaption>
                 <div id="equipo13">Real Betis Balompié</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="110" height="145" src="equipos/madrid.webp" alt="madrid"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/RealMadrid CF.webp" alt="madrid">
+            </div>
             <figcaption>
                 <div id="equipo14">Real Madrid Club de Fútbol</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/realSociedad.webp" alt="realSociedad">
+            <div class="grid-item"><img width="120" height="130"
+                    src="/static/equipos/RealSociedaddeFútbol.png" alt="realSociedad">
             </div>
             <figcaption>
                 <div id="equipo15">Real Sociedad de Fútbol</div>
@@ -163,35 +183,39 @@
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/valladolid.webp" alt="valladolid"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/RealValladolidCF.png"
+                    alt="valladolid"></div>
             <figcaption>
                 <div id="equipo16">Real Valladolid Club de Fútbol</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/sevilla.webp" alt="sevilla"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/SevillaFC.webp" alt="sevilla"></div>
             <figcaption>
                 <div id="equipo17">Sevilla Fútbol Club</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="110" height="165" src="equipos/lasPalmas.webp" alt="lasPalmas"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/UDLasPalmas.png"
+                    alt="lasPalmas"></div>
             <figcaption>
                 <div id="equipo18">Unión Deportiva Las Palmas</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/valencia.webp" alt="valencia"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/ValenciaCF.webp" alt="valencia">
+            </div>
             <figcaption>
                 <div id="equipo19">Valencia Club de Fútbol</div>
             </figcaption>
         </figure>
 
         <figure>
-            <div class="grid-item"><img width="120" height="135" src="equipos/villarreal.webp" alt="villarreal"></div>
+            <div class="grid-item"><img width="120" height="130" src="/static/equipos/VillarrealCF.png"
+                    alt="villarreal"></div>
             <figcaption>
                 <div id="equipo20">Villarreal Club de Fútbol</div>
             </figcaption>
@@ -201,23 +225,21 @@
     </div>
 
     <div class="footer">
-
         <center>
             <div class="grid-itemFooter">
                 <h4>Copyright</h4>
                 <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
             </div>
         </center>
-
         <center>
             <div class="grid-itemFooter">
                 <h4>Redes sociales</h4>
-                <a href="https://www.instagram.com/laliga/"><img src="logos/logoInsta.webp"></a>
-                <a href="https://x.com/laliga"><img src="logos/logoTwitter.webp"></a>
-                <a href="https://www.facebook.com/la.liga/"><img src="logos/logoFacebook.webp"></a>
-                <a href="https://www.tiktok.com/@laliga"><img src="logos/logoTiktok.webp"></a>
-
-            </div>
+                <a href="https://www.instagram.com/laliga/"><img src="../static/logos/logoInsta.png"></a>
+                <a href="https://x.com/laliga"><img src="../static/logos/logoTwitter.png"></a>
+                <a href="https://www.facebook.com/la.liga/"><img src="../static/logos/logoFacebook.png"></a>
+                <a href="https://www.tiktok.com/@laliga"><img src="../static/logos/logoTiktok.png"></a>
+        
+              </div>
         </center>
     </div>
 
@@ -231,58 +253,32 @@
         color: white;
     }
 
-
-    .menu {
-        overflow: hidden;
-        background-color: #333;
-    }
-
-    .menu a {
-        float: left;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 15px;
-    }
-
-    .sesion a {
-        float: right;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 15px;
-    }
-
-    .menu a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-
-    .sesion a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-
     h2 {
         color: white;
     }
 
     .grid-container {
         display: grid;
+        
         grid-template-columns: auto auto;
         padding-left: 200px;
         padding-right: 200px;
         padding-top: 30px;
+        column-gap: 5%;
+        row-gap: 5%;
         background-color: black;
     }
 
     .grid-item {
-        border: 1px solid black;
+        background-color: rgb(31, 31, 31);
+        border: 1px solid rgb(17, 17, 17);
         font-size: 30px;
         text-align: center;
 
+    }
+
+    figcaption:hover{
+        transition: all 1s linear;
     }
 
     .grid-container img {
@@ -292,10 +288,14 @@
 
 
     .footer {
-        display: grid;
-        grid-template-columns: auto auto;
+        display: flex;
+        width: 100%;
+        flex-direction: row;
         margin-top: 30px;
         margin-bottom: 30px;
+        justify-content: center;
+        position: relative;
+        bottom: 0%;
     }
 
     .grid-itemFooter img {
@@ -337,8 +337,16 @@
         margin-left: 10px;
 
     }
+
+    .active{
+    background-color: rgb(167, 167, 167);
+    
+  }
+
+  .active>a{
+    color: black;
+  }
 </style>
-<script
-src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
