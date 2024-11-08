@@ -1,5 +1,8 @@
 from jinja2 import Environment, FileSystemLoader
 import os
+import urllib.parse
+
+
 
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('index.html')
@@ -12,12 +15,15 @@ templateResultados = env.get_template('partidosfinalizados.html')
 templateGestion = env.get_template('gestion.html')
 templateRobots = env.get_template('robots.txt')
 
+
+
+
 # Funciones para manejar las rutas específicas
 def indice(environ, start_response, usuario, comentarioRes):
     # Lógica para la ruta 'templates/contacto.html'
     response = template.render(usuario=usuario, comentarioRes=comentarioRes).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -25,7 +31,7 @@ def paginaEvFuturos(environ, start_response, evFuturos, usuario):
     # Lógica para la ruta 'templates/calendario'
     response = templateFuturo.render(evFuturos = evFuturos, usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -33,7 +39,7 @@ def contacto(environ, start_response, usuario):
     # Lógica para la ruta 'templates/contacto.html'
     response = templateContacto.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -41,7 +47,7 @@ def paginaEnVivo(environ, start_response, envivo, usuario):
     # Lógica para la ruta 'templates/envivo.html'
     response = templateVivo.render(envivo = envivo, usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -49,7 +55,7 @@ def equipos(environ, start_response, usuario):
     # Lógica para la ruta 'templates/equipos.html'
     response = templateEquipos.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -57,7 +63,7 @@ def noticias(environ, start_response, usuario):
     # Lógica para la ruta 'templates/noticias.html'
     response = templateNoticias.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -65,7 +71,7 @@ def paginaResultados(environ, start_response, resTerminados, usuario):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
     response = templateResultados.render(resTerminados = resTerminados, usuario=usuario).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -73,7 +79,7 @@ def gestion(environ, start_response, usuario, partidos, buscado):
     # Lógica para la ruta '/templates/partidosfinalizados.html'
     response = templateGestion.render(usuario=usuario, partidos=partidos, buscado=buscado).encode('utf-8')
     status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [response]
 
@@ -105,7 +111,7 @@ def robots(environ, start_response):
 def handle_404(environ, start_response):
     # Lógica para manejar una ruta no reconocida (404)
     status = '404 Not Found'
-    response_headers = [('Content-type', 'text/html')]
+    response_headers = [('Content-type', 'text/html;charset=utf-8')]
     start_response(status, response_headers)
     return [b'Page not found']
 
@@ -114,6 +120,8 @@ def handle_404(environ, start_response):
 def serve_static(environ, start_response):     
     static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')) #  Aqui conseguimos la ruta a static
     path = environ['PATH_INFO']
+    path = urllib.parse.unquote(path)
+    print(f"hola: {path}")
     if not path.startswith('/static/'):
         start_response('404 Not Found', [('Content-type', 'text/plain')])
         return [b'Not Found']

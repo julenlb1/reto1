@@ -56,6 +56,14 @@
 
     </div>
   </nav>
+
+<div class="search_box">
+        <form action="" id="form2">
+            <label for="search">Buscar en la página:</label>
+            <input type="text" id="search" placeholder="Busca el matchday">
+            <input type="button" id="submit_form" onclick="checkInput()" value="Buscar">
+        </form>
+    </div>
   <center>
     <h1>Partidos finalizados</h1>
   </center>
@@ -206,7 +214,21 @@
   .active>a{
     color: black;
   }
+
+  .search_box{
+    float: right;
+    position:fixed;
+    margin-top: 10%;
+  }
 </style>
+
+<script>
+  function checkInput() {
+      var query = document.getElementById('search').value;
+      window.find(query);
+      return true;
+  }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>

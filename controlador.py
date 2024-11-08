@@ -20,7 +20,7 @@ buscado = False
 def leerResTerminados(environ, start_response): # Función para hacer una query de la base de datos a la tabla de resultados terminados
                                                 # y plasmar esos datos en el html mediante jinja
     sesion = modelos.abrir_sesion() # Abro la sesión de queries
-    juegos = sesion.query(ResTerminados).order_by(ResTerminados.matchday.asc(), ResTerminados.dia.asc()).all() # Esta consulta obtendrá los datos con un orden jerárquico ordenado por matchday > dia > partido 
+    juegos = sesion.query(ResTerminados).order_by(ResTerminados.dia.desc(),ResTerminados.matchday.desc()).all() # Esta consulta obtendrá los datos con un orden jerárquico ordenado por matchday > dia > partido 
     datosJerarquizados = {} # Este diccionario guardara los datos en ese orden jerárquico                                                                          
     for juego in juegos:
         if juego.matchday not in datosJerarquizados:
@@ -28,13 +28,14 @@ def leerResTerminados(environ, start_response): # Función para hacer una query 
         if juego.dia not in datosJerarquizados[juego.matchday]:
             datosJerarquizados[juego.matchday][juego.dia] = []
         datosJerarquizados[juego.matchday][juego.dia].append(juego)
+        print(juego)
     modelos.cerrar_sesion(sesion)
     sesion = None
     return datosJerarquizados # Devolver el diccionario
 
 def leerEnVivo(environ, start_response): # Función para hacer una query de la base de datos a la tabla de partidos en vivo
     sesion = modelos.abrir_sesion()      # y plasmar esos datos en el html mediante jinja
-    directos = sesion.query(enVivo).order_by(enVivo.matchday.asc()).all()
+    directos = sesion.query(enVivo).order_by(enVivo.matchday.desc()).all()
     datosJerarquizadosDirecto = {}
     for directo in directos:
         if directo.matchday not in datosJerarquizadosDirecto:
@@ -341,6 +342,8 @@ def actualizarPartido(environ, start_response):
                 </body>
                 </html>
                 """
+                buscado = False
+                partidoBuscado = ""
                 return [html_response.encode('utf-8')]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
@@ -390,6 +393,9 @@ def app(environ, start_response):
         return vistas.paginaEnVivo(environ, start_response, enVivo, usuario)
     elif path == '/partidosfinalizados':
         resTerminados = leerResTerminados(environ, start_response)
+        for res in resTerminados.items():
+            print(res)
+        print("aloasdasdadasUIHFUIHQUIFHQIEUF")
         return vistas.paginaResultados(environ, start_response, resTerminados, usuario)
     elif path == '/noticias':
         return vistas.noticias(environ, start_response, usuario)

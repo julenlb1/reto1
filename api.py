@@ -11,7 +11,7 @@ from datetime import datetime
 from datetime import date
 from datetime import timedelta
 import modelos
-
+import urllib.parse
 DATABASE_URL = "postgresql://benat:12345678@localhost/elrincondelaliga?port=5432"
 engine = create_engine(DATABASE_URL)
 
@@ -53,7 +53,6 @@ if response.status_code == 200:
             match_datetime = datetime.strptime(match_date + " 00:00","%Y-%m-%d %H:%M")
             
         if match_datetime.date() < hoy: # Si el dia del json es menor al actual, insertará los datos en la tabla de ResTerminados
-            print(f"Fecha del partido:{match_datetime.date()}\n Fecha actual: {hoy}")
             esmipartido = sesion.query(modelos.ResTerminados).filter_by(id=i,mipartido="false").all() # Esta consulta comprueba si el partido que va actualizar no esta en la tabla y no ha sido creado por el usuario
             if len(esmipartido) == 0:
                 # Partidos terminados
@@ -62,8 +61,9 @@ if response.status_code == 200:
                 if "ft" in match.get("score", {}):
                     resterminado.reseq1 = match["score"]["ft"][0]
                     resterminado.reseq2 = match["score"]["ft"][1]
-                resterminado.eq1 = match["team1"]
-                resterminado.eq2 = match["team2"]
+                resterminado.eq1 = urllib.parse.unquote(match["team1"])
+                resterminado.eq2 = urllib.parse.unquote(match["team2"])
+                print(urllib.parse.unquote(match["team2"]))
                 resterminado.horainicio = match_datetime.time()
                 resterminado.dia = match_date
                 resterminado.matchday = match["round"]
@@ -75,8 +75,8 @@ if response.status_code == 200:
                 # Partidos en vivo
                 envivo = modelos.enVivo()
                 envivo.id = i
-                envivo.eq1 = match["team1"]
-                envivo.eq2 = match["team2"]
+                envivo.eq1 = urllib.parse.unquote(match["team1"])
+                envivo.eq2 = urllib.parse.unquote(match["team1"])
                 envivo.goleseq1 = 0
                 envivo.goleseq2 = 0
                 envivo.minactual = 0
@@ -96,8 +96,8 @@ if response.status_code == 200:
                     match_datetime = datetime.strptime("2000-01-01 00:00","%Y-%m-%d %H:%M")
                 evFuturo = modelos.evFuturos()
                 evFuturo.id = i
-                evFuturo.eq1 = match["team1"]
-                evFuturo.eq2 = match["team2"]
+                evFuturo.eq1 = urllib.parse.unquote(match["team1"])
+                evFuturo.eq2 = urllib.parse.unquote(match["team1"])
                 evFuturo.matchday = match["round"]
                 evFuturo.dia = match_date
                 evFuturo.horainicio = match_datetime.time()

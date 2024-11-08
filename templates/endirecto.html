@@ -60,6 +60,11 @@
     <h1>Partidos en directo</h1>
   </center>
   <br><br>
+  {% if envivo == {} %}
+    <center>
+      <h2>Hoy y ahora no hay ningún partido disputandose, disculpa por las molestias</h2>
+    </center>
+  {% else %}
   {% for jornada, partidos in envivo.items() %}
   <center>
     <h4 style="margin: 3% 0% 0% 0%;">{{ jornada }}</h4>
@@ -85,7 +90,7 @@
   </div>
   <br><br>
   {% endfor %}
-
+  {% endif %}
   <div class="footer">
     <center>
       <div class="grid-itemFooter">
