@@ -3,7 +3,6 @@ import os
 import urllib.parse
 
 
-
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('index.html')
 templateContacto = env.get_template('contacto.html')
@@ -120,7 +119,7 @@ def handle_404(environ, start_response):
 def serve_static(environ, start_response):     
     static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')) #  Aqui conseguimos la ruta a static
     path = environ['PATH_INFO']
-    path = urllib.parse.unquote(path)
+    path = urllib.parse.unquote(path, encoding="utf-8")
     print(f"hola: {path}")
     if not path.startswith('/static/'):
         start_response('404 Not Found', [('Content-type', 'text/plain')])
