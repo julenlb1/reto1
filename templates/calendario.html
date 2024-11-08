@@ -92,14 +92,16 @@
   {% endfor %}
 
   <div class="footer">
+
     <center>
-      <div class="grid-itemFooter">
+      <div class="grid-itemFooter texto">
         <h4>Copyright</h4>
         <p>&copy; 2024 Mi Sitio Web. Todos los derechos reservados.</p>
       </div>
     </center>
+
     <center>
-      <div class="grid-itemFooter">
+      <div class="grid-itemFooter logos">
         <h4>Redes sociales</h4>
         <a href="https://www.instagram.com/laliga/"><img src="../static/logos/logoInsta.png"></a>
         <a href="https://x.com/laliga"><img src="../static/logos/logoTwitter.png"></a>
@@ -108,6 +110,7 @@
 
       </div>
     </center>
+
   </div>
 
 </body>
@@ -115,9 +118,9 @@
 /* MEDIA QUERY: Para móvil */
 @media (max-width:450px) {
 
-*{
-  max-width: auto;
-}
+ body{
+  width: 100%;
+ }
 
 div.resultados{
   max-width: auto;
@@ -132,6 +135,17 @@ div.goles2 {
 img{
   height: 36px;
   width: 30px;
+}
+.footer{
+      display: flex;
+      flex-direction: column;
+      max-width: 100%;
+      width: 90%;
+    }
+.logos{
+  position: absolute;
+  top: 100px;
+  right: 50px;
 }
 }
 
