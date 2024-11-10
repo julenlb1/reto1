@@ -66,8 +66,8 @@ def leerComIndex(environ, start_response):  # Función para hacer una query de l
     sesion = None
     return comentarios
 
-def buscarPartido(environ, start_response):
-    
+def buscarPartido(environ, start_response):# Función para hacer una query de la base de datos a la tabla de partidos terminados
+                                           # Según lo que el usuario pida 
     global usuario
     global buscado
     global partidoBuscado
@@ -112,16 +112,15 @@ def ponerComentarioRes(environ, start_response):
                 return[b"<script type=text/javascript>alert('No has iniciado sesion')</script>"]
             else:
                 print(f"usuario:{usuario}, idUsuario:{idUsuario}, comentario:{comentario}")
+                print("aaaa")
                 escribeRes = modelos.escribeRes(
                 idusuario=idUsuario,
-                usuario=usuario,
+                nombreusuario=usuario,
                 comentario=comentario,
                 )
-                print("hola")
-                escribeRes.create(UserSesion)
-                print("hola")
-                start_response('303 See Other', [('Location', '/')])
                 
+                escribeRes.create(UserSesion)
+                start_response('303 See Other', [('Location', '/')])
                 return [b'']
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
