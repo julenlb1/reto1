@@ -1,3 +1,7 @@
+# Este codigo se encarga de dos tareas, la mas importante siendo la gestión de templates y renderización de contenido en el navegador
+# además de servir a los archivos estaticos (Solamente imagenes)
+
+# Todos los imports necesarios para el buen funcionamiento del programa
 from jinja2 import Environment, FileSystemLoader
 import os
 import urllib.parse
@@ -14,12 +18,9 @@ templateResultados = env.get_template('partidosfinalizados.html')
 templateGestion = env.get_template('gestion.html')
 templateRobots = env.get_template('robots.txt')
 
-
-
-
 # Funciones para manejar las rutas específicas
 def indice(environ, start_response, usuario, comentarioRes):
-    # Lógica para la ruta 'templates/contacto.html'
+    # Lógica para la ruta '/contacto'
     response = template.render(usuario=usuario, comentarioRes=comentarioRes).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -27,7 +28,7 @@ def indice(environ, start_response, usuario, comentarioRes):
     return [response]
 
 def paginaEvFuturos(environ, start_response, evFuturos, usuario):
-    # Lógica para la ruta 'templates/calendario'
+    # Lógica para la ruta '/calendario'
     response = templateFuturo.render(evFuturos = evFuturos, usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -35,7 +36,7 @@ def paginaEvFuturos(environ, start_response, evFuturos, usuario):
     return [response]
 
 def contacto(environ, start_response, usuario):
-    # Lógica para la ruta 'templates/contacto.html'
+    # Lógica para la ruta '/contacto'
     response = templateContacto.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -43,7 +44,7 @@ def contacto(environ, start_response, usuario):
     return [response]
 
 def paginaEnVivo(environ, start_response, envivo, usuario):
-    # Lógica para la ruta 'templates/envivo.html'
+    # Lógica para la ruta '/envivo'
     response = templateVivo.render(envivo = envivo, usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -51,7 +52,7 @@ def paginaEnVivo(environ, start_response, envivo, usuario):
     return [response]
 
 def equipos(environ, start_response, usuario):
-    # Lógica para la ruta 'templates/equipos.html'
+    # Lógica para la ruta '/equipos'
     response = templateEquipos.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -59,7 +60,7 @@ def equipos(environ, start_response, usuario):
     return [response]
 
 def noticias(environ, start_response, usuario):
-    # Lógica para la ruta 'templates/noticias.html'
+    # Lógica para la ruta '/noticias'
     response = templateNoticias.render(usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -67,7 +68,7 @@ def noticias(environ, start_response, usuario):
     return [response]
 
 def paginaResultados(environ, start_response, resTerminados, usuario):
-    # Lógica para la ruta '/templates/partidosfinalizados.html'
+    # Lógica para la ruta '/partidosfinalizados'
     response = templateResultados.render(resTerminados = resTerminados, usuario=usuario).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -75,7 +76,7 @@ def paginaResultados(environ, start_response, resTerminados, usuario):
     return [response]
 
 def gestion(environ, start_response, usuario, partidos, buscado):
-    # Lógica para la ruta '/templates/partidosfinalizados.html'
+    # Lógica para la ruta '/partidosfinalizados'
     response = templateGestion.render(usuario=usuario, partidos=partidos, buscado=buscado).encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text/html;charset=utf-8')]
@@ -83,6 +84,7 @@ def gestion(environ, start_response, usuario, partidos, buscado):
     return [response]
 
 def sesion_init(start_response, hayUser):
+    # Lógica para la ruta '/log-in'
     if hayUser:
         start_response('303 See Other', [('Location', '/')])
         return [b'Seras redirigido al indice']
@@ -91,6 +93,7 @@ def sesion_init(start_response, hayUser):
         return [b'']
 
 def sesion_finish(environ, start_response):
+    # Lógica para la ruta '/log-out'
     start_response('303 See Other', [('Location', '/')])
     return [b'']
 
@@ -100,7 +103,7 @@ def no_user_handle(environ, start_response):
     return [b'Usuario no encontrado, redireccionando...']
 
 def robots(environ, start_response):
-    # Lógica para la ruta '/templates/partidosfinalizados.html'
+    # Lógica para la ruta '/robots'
     response = templateRobots.render().encode('utf-8')
     status = '200 OK'
     response_headers = [('Content-type', 'text')]

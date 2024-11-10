@@ -1,4 +1,9 @@
-from wsgiref.simple_server import make_server
+# Este extenso codigo se encarga de variadas tareas, la mas importante siendo la gestión de rutas y este código hace la función de servidor pero
+# además posee de varias funciones que actuan principalmente sobre la base de datos para insertar o extraer datos de la misma.
+# Posdata: Al ser el archivo más extenso y complejo del proyecto, naturalmente es el que más problemas nos ha causado
+
+# Todos los imports necesarios para el buen funcionamiento del programa
+from wsgiref.simple_server import make_server 
 from urllib.parse import parse_qs
 import vistas
 import modelos
@@ -7,6 +12,7 @@ from modelos import enVivo
 from modelos import evFuturos
 from modelos import escribeRes
 import os
+# Algunas variables han tenido que ser globales porque de otra manera nos daba errores
 global usuario
 usuario = ""
 hayUser = False
@@ -28,7 +34,6 @@ def leerResTerminados(environ, start_response): # Función para hacer una query 
         if juego.dia not in datosJerarquizados[juego.matchday]:
             datosJerarquizados[juego.matchday][juego.dia] = []
         datosJerarquizados[juego.matchday][juego.dia].append(juego)
-        print(juego)
     modelos.cerrar_sesion(sesion)
     sesion = None
     return datosJerarquizados # Devolver el diccionario
@@ -86,12 +91,10 @@ def buscarPartido(environ, start_response):# Función para hacer una query de la
 
                 resterminados = modelos.ResTerminados()
                 consulta = {"eq1":eq1, "eq2":eq2, "dia":dia}
-                print("partidoBuscado")
                 partidoBuscado = resterminados.readAlgunos(UserSesion, **consulta)
                 buscado = True
                 
                 start_response('303 See Other', [('Location', '/gestion')])
-                print("partidoBuscado")
                 return [b"Partido encontrado"]
         except Exception as e:
             start_response('500 Internal Server Error', [('Content-type', 'text/plain')])
@@ -99,7 +102,8 @@ def buscarPartido(environ, start_response):# Función para hacer una query de la
     else:
         return vistas.handle_404(environ, start_response)
 
-def ponerComentarioRes(environ, start_response):
+def ponerComentarioRes(environ, start_response):# Función para hacer una query de insercion en la base de datos a la tabla de escriberes
+                                                # Según el contenido del mensaje
     global usuario
     if environ['REQUEST_METHOD'] == 'POST':
         try:
@@ -111,8 +115,6 @@ def ponerComentarioRes(environ, start_response):
             if not usuario:
                 return[b"<script type=text/javascript>alert('No has iniciado sesion')</script>"]
             else:
-                print(f"usuario:{usuario}, idUsuario:{idUsuario}, comentario:{comentario}")
-                print("aaaa")
                 escribeRes = modelos.escribeRes(
                 idusuario=idUsuario,
                 nombreusuario=usuario,
@@ -128,7 +130,8 @@ def ponerComentarioRes(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def crearUsuario(environ, start_response):
+def crearUsuario(environ, start_response):# Función para hacer una query de insercion en la base de datos a la tabla de usuarios
+                                          # con los datos insertados por el usuario en el formulario de registro de cuenta
     if environ['REQUEST_METHOD'] == 'POST':
         try:
             size = int(environ.get('CONTENT_LENGTH', 0))
@@ -142,7 +145,8 @@ def crearUsuario(environ, start_response):
             if usuario == None or email == None or contrasena == None or contrasena2 == None:
                 start_response('303 See Other', [('Location', '/contacto')])
                 start_response('200 OK', [('Content-type', 'text/html')])
-                html_response = """
+                # Para una mejor experiencia de usuario, hemos puesto un pequeño HTML tras enviar el formulario que te dice como ha ido 
+                html_response = """ 
                 <html>
                 <head>
                     <title>Error</title>
@@ -193,7 +197,8 @@ def crearUsuario(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def iniciar_sesion(environ, start_response):
+def iniciar_sesion(environ, start_response):# Función para hacer una query  en la base de datos a la tabla de usuarios y buscar si
+                                            # el usuario está y hacer un inicio de sesión si el usuario está
     if environ['REQUEST_METHOD'] == 'POST':
         size = int(environ.get('CONTENT_LENGTH', 0))
         data = environ['wsgi.input'].read(size).decode()
@@ -215,14 +220,15 @@ def iniciar_sesion(environ, start_response):
             UserSesion = None
             return "", None, False, None
 
-def finalizar_sesion():
+def finalizar_sesion(): # Función para finalizar la sesión cuando sea necesario
     global usuario, UserSesion, hayUser, idUsuario
     modelos.cerrar_sesion(UserSesion)
     usuario = ""
     idUsuario = None
     hayUser = False
 
-def insertarPartido(environ, start_response):
+def insertarPartido(environ, start_response): # Esta función es para insertar partidos creados por el usuario en la página de gestión en la
+                                              # tabla de evfuturos   
     if environ['REQUEST_METHOD'] == 'POST':
         try:
             size = int(environ.get('CONTENT_LENGTH', 0))
@@ -234,7 +240,6 @@ def insertarPartido(environ, start_response):
             hora = paramsPartido.get('horainicio', [None])[0]
             matchday = paramsPartido.get('matchday', [None])[0]
             if eq1 == None or eq2 == None or dia == None or hora == None or matchday == None:
-                print(f"eq1:{eq1}; eq2:{eq2}; dia:{dia}; hora:{hora}; matchday:{matchday};")
                 start_response('200 OK', [('Content-type', 'text/html')])
                 html_response = """
                 <html>
@@ -275,7 +280,8 @@ def insertarPartido(environ, start_response):
     else:
         return vistas.handle_404(environ, start_response)
 
-def actualizarPartido(environ, start_response):
+def actualizarPartido(environ, start_response):# Esta función es para actualizar resultados de partidos terminados según el partido que elija 
+                                              # el usuario en la página de gestión y actualizarlo en la tabla de resterminados   
     if environ['REQUEST_METHOD'] == 'POST':
         try:
             size = int(environ.get('CONTENT_LENGTH', 0))
@@ -290,7 +296,6 @@ def actualizarPartido(environ, start_response):
             dia = paramsUpdate.get('fecha_update2', [None])[0]
             matchday = paramsUpdate.get('matchday', [None])[0]
             if eq1 == None or eq2 == None or dia == None or hora == None or matchday == None or reseq1 == None or reseq2 == None:
-                print(f"eq1:{eq1}; eq2:{eq2}; dia:{dia}; hora:{hora}; matchday:{matchday}; reseq1:{reseq1} reseq2:{reseq2}")
                 start_response('200 OK', [('Content-type', 'text/html')])
                 html_response = """
                 <html>
@@ -352,7 +357,7 @@ def actualizarPartido(environ, start_response):
 
 
 
-def app(environ, start_response):
+def app(environ, start_response): # La función de app, que gestiona todas las rutas de la aplicación
     global usuario, UserSesion, hayUser, idUsuario
     path = environ.get('PATH_INFO')
     if path == '/':
@@ -366,7 +371,6 @@ def app(environ, start_response):
         return crearUsuario(environ, start_response)
     elif path == '/log-in':
         usuario, UserSesion, hayUser, idUsuario = iniciar_sesion(environ, start_response)
-        print(usuario)
         return vistas.sesion_init(start_response, hayUser)
     elif path == '/noUser':
         return vistas.no_user_handle(environ, start_response)    
@@ -392,9 +396,6 @@ def app(environ, start_response):
         return vistas.paginaEnVivo(environ, start_response, enVivo, usuario)
     elif path == '/partidosfinalizados':
         resTerminados = leerResTerminados(environ, start_response)
-        for res in resTerminados.items():
-            print(res)
-        print("aloasdasdadasUIHFUIHQUIFHQIEUF")
         return vistas.paginaResultados(environ, start_response, resTerminados, usuario)
     elif path == '/noticias':
         return vistas.noticias(environ, start_response, usuario)
@@ -417,10 +418,3 @@ if __name__ == "__main__":
     httpd = make_server(host, port, app)
     print(f"Servidor en http://{host}:{port}")
     httpd.serve_forever()
-'''
-Una vez ejecutado el controlador, podemos acceder a través del navegador, 
-con las rutas: http://localhost:8000/    (no se usa jinja2)
-y   http://localhost:8000/es, esta segunda usa jinja2.
-Con la url http://localhost:8000/static/ se mostrará el archivo css.
-Si se pone una url diferente, saldrá el mensaje de 'página no encontrada'
-'''

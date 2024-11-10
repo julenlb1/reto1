@@ -1,6 +1,7 @@
 ## Este codigo se ejecutará cada cierto tiempo para actualizar las tablas de partidos futuros cuando dichos partidos ya se hayan disputado y moverá esos datos de la tabla de 
 # evFuturos a la de ResTerminados, además de poner un evento en vivo si un partido se está disputando 
 
+# Todos los imports necesarios para el buen funcionamiento del programa
 from sqlalchemy import create_engine, Column, Float, Integer, String, Date, Time
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql.schema import ForeignKey
